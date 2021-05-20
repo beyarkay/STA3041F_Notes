@@ -919,8 +919,95 @@ Work in progress.
                 simplifies the calculations a bit.
         \end{enumerate} 
 
+        \paragraph{Time Series Video 5} This video was a lot of math walkthroughs, which
+        I'm not going to bother writing down.
+        \marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=108de531-9917-45ef-896c-90539a3e3604}{Time Series Video 5}}
 
 
+    \subsection{3041F: Moving Averages}
+        \marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=35c75f6e-6cf9-4e24-8a0c-1b5e9e712892}{Time Series Video 6}}
+        A moving averages is a linear combination of current and past error terms.
+        So we can define the moving average at time $t$ a$x_t = e_{t-n} + \dots + e_t$, 
+        where we call $n$ the order of the moving average, often written as MA(n).
+
+        There are certain useful properties, but in order for them to hold we need
+        the time series to not have a seasonal component and be represented by
+        \begin{equation*}
+            y_t = \mu_t + e_t \qquad \text{where $\mu_t$ is the mean at time t}
+        \end{equation*}
+        and the error terms $e_t \sim N(0, \sigma^2)$ are all independant.
+        Also, define the smoothened trend at time $t$, $\mu_t$ as:
+        \begin{equation*}
+            \hat{\mu}_t = \sum_{i = -s}^s w_i \cdot y_{t + i}
+        \end{equation*}
+
+        Then the following properties hold:
+        \begin{equation*}
+            \mathbb{V}[\hat{\mu}_t] = \sigma^2 \sum_{i = -s}^{s} w^2_i
+        \end{equation*}
+        \begin{equation*}
+            \mathbb{C}ov[\hat{\mu}_t, \hat{\mu}_{t+k}] = 
+                \sigma^2 \sum_{i = -s}^{s-k} w_i \cdot w_{i+k}
+        \end{equation*}
+        \begin{equation*}
+            \begin{aligned}
+                \mathbb{C}orr[\hat{\mu}_t, \hat{\mu}_{t+k}] &= 
+                \frac{\mathbb{C}ov[\hat{\mu}_t, \hat{\mu}_{t+k}]}{
+                    \mathbb{V}[\hat{\mu}_t, \hat{\mu}_{t+k}]} \\
+                &= \frac{
+                        \sum_{i = -s}^{s-k} w_i \cdot w_{i+k}
+                    }{ 
+                        \sum_{i = -s}^{s} w^2_i
+                    }\\
+            \end{aligned}
+        \end{equation*}
+        
+        It can also be proven that the variance of the moving average is less than the 
+        variance of the original data.
+
+        If we have a time series described by $y_t = \mu_t + e_t$ and the estimate
+        for the trend is given by $\tilde{y_t}$, then we define the de-trended series
+        as the difference $y_t - \tilde{y_t}$. If $\tilde{y}_t$ is an unbiased estimate
+        of the trend then $\mathbb{E}[y_t - \tilde{y_t}] = 0$.
+
+        An example of the original series and the de-trended series is shown in figure
+        \ref{fig:detrended_series}
+
+        \begin{figure}[t]
+            \centering
+            \includegraphics[width=8cm]{detrended_series}
+            \caption{The detrended series has an expectation of zero if the estimate of
+            the trend is unbiased.}
+            \label{fig:detrended_series}
+        \end{figure}
+
+        Note that the seasonal component of a series can be removed using a moving
+        average with a window size equal to the period of the season. This can be 
+        seen by looking at the MA(12) line in figure \ref{fig:removing_the_seasons}
+
+
+        \begin{figure}[t]
+            \centering
+            \includegraphics[width=8cm]{removing_the_seasons}
+            \caption{The seasonality can be removed by applying a moving average
+            which has a window size of the period of the data.}
+            \label{fig:removing_the_seasons}
+        \end{figure}
+
+
+        Some comments about Moving Averages
+        \begin{itemize} 
+            \item They smoothen out a time series (ie they reduce variation)
+            \item They estimate the trend of a time series
+            \item The transformed series will be correlated with itself, as $t_i$th
+                point in the moving average is a linear combination of the 
+                $t_{i-s}, \dots t_{i+s}$ points in the original data.
+            \item The above point means that even uncorrelated, completely random data
+                will end up with correlations.
+            \item We are unable to estimate the end points, as there are no data points
+                in our window
+            \item 
+        \end{itemize} 
 
 \section{Terms and Definitions}
     \paragraph{Absorbing} Once you're in an absorbing state, it's impossible to leave.
