@@ -845,8 +845,80 @@ Work in progress.
         % TODO include notes on the application of Box-Cox
 
 
-    \subsection{3041F: Another Lecture}
+    \subsection{3041F: Fitting Linear Filters}
     \marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=eb6c2126-53cd-484c-a148-4cac57e904f2}{Time Series Video 4}}
+        In time series analysis, we often need to remove the noise present in the data.
+        Filtering the data is the processes of removing noise from the data, and there are different methods of filtering.
+        \begin{figure}[t]
+            \centering
+            \includegraphics[width=8cm]{filtering_local_trends}
+            \caption{An example of moving average, block mean, and sample mean estimates of
+             the trend of the data.}
+            \label{fig:filtering_local_trends}
+        \end{figure}
+
+        The sample mean of the data is often used to estimate the trend of that data. Although this assumes that the trend does not change over time (ie it's not good for increasing/decreasing data).
+        An example of the sample mean is shown with the black +'s in Figure \ref{fig:filtering_local_trends}.
+
+        A better way of estimating the trend is to divide the data into smaller blocks, and calculate the sample mean for each of those blocks. Then use these sample means to be the trend, although this still isn't great.
+        An example of the block mean is shown with the blue x's in Figure \ref{fig:filtering_local_trends}.
+
+        An even better way is via linear filters, one of which is the weighted average, an example of which is shown with the purple dashed line in Figure \ref{fig:filtering_local_trends} (labelled 'filter').
+        
+        You can see that the weighted average stays the closest to the data, while still 
+        ignoring some of the jagged peaks. You can think of it as smoothing the data while
+        remaining close to it.
+
+        Linear filters can also be used to estimate seasonal components by varying various parameters that the filters take. These parameters change how smooth the filter makes the data, or how much attention it pays to local changes compared to larger scale changes.
+
+        We can transform our original time series data $y_1, \dots, y_n$ to a filtered
+        version $\tilde{y_1}, \dots, \tilde{y_n}$ by iterating over some of the items
+        in $y$ and multiplying them by a weight $w$. 
+
+        We'll look at all the $q$ items before the $y_i$ we care about, as well as all the $s$
+        items after that same $y_i$. Then we'll multiply them by a weight $w_i$ and add them
+        up:
+
+        \begin{equation*}
+            \tilde{y_t} = \sum_{i = -q}^{s} w_i \cdot y_{t+i}
+        \end{equation*}
+
+        Note that the $w_i$'s all have to sum to 1 (so the sample mean stays the same), 
+        and usually we set $s = q$ (so we look at the same number of items behind us 
+        as we do ahead of us).
+
+        We can also show that if $\mathbb{E}[y_t] = \alpha + \beta t$ then the linear filter
+        preserves this and $\mathbb{E}[\tilde{y_t}] = \alpha + \beta t$.
+
+
+        The linear filter won't always preserve a quadratic trend unless we get funky with
+        how we choose our weights. For example, if we have an equation for $y_t$ in the
+        form:
+
+        \begin{equation*}
+            y_t = \alpha + \beta t + \phi t^2 + e_t
+        \end{equation*}
+        Then the expectation of our linear filter version of $y_t$ is given by
+        \begin{equation*}
+            \mathbb{E}[\tilde{y_t}] = \alpha + \beta t + \phi t^2 + \phi \sum_i w_i i^2
+        \end{equation*}
+        So in order to preserve a quadratic trend, we'd need to choose the weights $w_i$ such
+        that the final term is equal to zero, ie:
+        \begin{equation*}
+            0 = \sum_i w_i i^2
+        \end{equation*}
+
+
+        Estimating the weights of the linear filter can be done as follows:
+        \begin{enumerate} 
+            \item Decide on how many weights you'll use. This is called the window
+                size
+            \item Decide if you're trend equation is linear, quadratic, cubic, etc.
+            \item Estimate the coefficients of the trend equation $y_t = \alpha + \beta t + \dots$ using least squares.
+            \item We can center the window such that the current $y_t$ is at zero, which
+                simplifies the calculations a bit.
+        \end{enumerate} 
+
 
 
 

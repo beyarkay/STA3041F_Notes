@@ -16,4 +16,5 @@ for script in ./scripts/*; do
     ./$script 
 done
 echo 'Compiling LaTeX...'
-pdflatex STA3041F_Notes.tex > /dev/null && echo 'All Complete'
+# Run it twice to make sure the images all get referenced correctly.
+pdflatex STA3041F_Notes.tex && pdflatex STA3041F_Notes.tex > /dev/null && echo 'All Complete'
