@@ -18,6 +18,7 @@
 
 \begin{document}
 \maketitle
+\tableofcontents
 \section{Common Distributions}
     \subsection{Poisson Distribution}
     \begin{equation*}
@@ -749,100 +750,103 @@ Work in progress.
             ln(X_t) &= ln(\mu_t) + ln(s_t) + ln(c_t) + ln(e_t) \\
         \end{aligned}
     \end{equation*}
-\subsection{Trend}
-    The long term growth/decline of a time series, modelled with a simple function. Basically just the expectation.
+    \subsection{Trend}
+        The long term growth/decline of a time series, modelled with a simple function. Basically just the expectation.
 
-    We can also look at the local trend, which just takes into account \(n\) prior points of the time series instead of all the data.
+        We can also look at the local trend, which just takes into account \(n\) prior points of the time series instead of all the data.
 
-    Some examples of Trend:
-    \begin{itemize}
-        \item \(X_t = \epsilon_t\) with \(\epsilon_t \sim N(0, a)\) all iid.
-            Since model's expectation \(\mu_t = \mathbb{E}[X_t] = 0\) doesn't depend on time, 
-            we can use the sample mean to estimate the population mean as all samples are from the same distribution.
-        \item \(X_t = t + \epsilon_t \) with \(\epsilon_t \sim N(0, a)\) all iid.
-            This model's expectation \(\mu_t = \mathbb{E}[X_t] = t\) does depend on time, so the sample mean wont' be a good estimate of the true mean.
-    \end{itemize}
+        Some examples of Trend:
+        \begin{itemize}
+            \item \(X_t = \epsilon_t\) with \(\epsilon_t \sim N(0, a)\) all iid.
+                Since model's expectation \(\mu_t = \mathbb{E}[X_t] = 0\) doesn't depend on time, 
+                we can use the sample mean to estimate the population mean as all samples are from the same distribution.
+            \item \(X_t = t + \epsilon_t \) with \(\epsilon_t \sim N(0, a)\) all iid.
+                This model's expectation \(\mu_t = \mathbb{E}[X_t] = t\) does depend on time, so the sample mean wont' be a good estimate of the true mean.
+        \end{itemize}
 
-\subsection{Seasonality}
-    When you have repeating trends in the data such as temperature increasing every summer or business flights decreasing over the weekend.
+    \subsection{Seasonality}
+        When you have repeating trends in the data such as temperature increasing every summer or business flights decreasing over the weekend.
 
-    The amplitude of the seasonality is the difference between the peaks and troughs of the data.
-    This amplitude might change over time. The amplitude will affect the variance of the overall, as a high amplitude will increase the variance.
+        The amplitude of the seasonality is the difference between the peaks and troughs of the data.
+        This amplitude might change over time. The amplitude will affect the variance of the overall, as a high amplitude will increase the variance.
 
-\subsection{Cycles}
-    Basically seasonality on top of the existing seasonality. If seasonality repeats every year, then cycles repeat over decades. 
+    \subsection{Cycles}
+        Basically seasonality on top of the existing seasonality. If seasonality repeats every year, then cycles repeat over decades. 
 
-    Cycles are often used to refer to less regular oscillations in the data, such as bull and bear stock market trends which are less predictable than the annual trends produced by tax deadlines and such.
-    We won't be covering the cyclical component in STA3041F.
+        Cycles are often used to refer to less regular oscillations in the data, such as bull and bear stock market trends which are less predictable than the annual trends produced by tax deadlines and such.
+        We won't be covering the cyclical component in STA3041F.
 
-\subsection{Transformations}
-    Because of the variablity of the data, we might have to first transform the data such that our additive model is appropriate.
-    Our additive model only works with data that changes linearly in time, so if the seasonality amplitude increases exponentially then we'll have to transform the data to get rid of that exponential growth.
-    The family of transformations we'll be using is the Box-Cox transformations.
+    \subsection{Transformations}
+        Because of the variablity of the data, we might have to first transform the data such that our additive model is appropriate.
+        Our additive model only works with data that changes linearly in time, so if the seasonality amplitude increases exponentially then we'll have to transform the data to get rid of that exponential growth.
+        The family of transformations we'll be using is the Box-Cox transformations.
 
 \section{3041F: Transformations}
-\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=0ab6eb00-7b9d-4895-be8a-006463cd33b0}{Time Series Video 3}}
-In figure \ref{fig:airplane_data}, you can see the seasonal component in the repeating peaks and troughs. 
-There is an upwards trend in the data and no cyclical component
+    \marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=0ab6eb00-7b9d-4895-be8a-006463cd33b0}{Time Series Video 3}}
+    In figure \ref{fig:airplane_data}, you can see the seasonal component in the repeating peaks and troughs. 
+    There is an upwards trend in the data and no cyclical component
 
-There is an increasing amount of variance as time continues as shown by how the difference between the peaks and troughs. This implies that a multiplicative model might work well.
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=8cm]{airplane_data}
-    \caption{Airplane data}
-    \label{fig:airplane_data}
-\end{figure}
+    There is an increasing amount of variance as time continues as shown by how the difference between the peaks and troughs. This implies that a multiplicative model might work well.
+    \begin{figure}[t]
+        \centering
+        \includegraphics[width=8cm]{airplane_data}
+        \caption{Airplane data}
+        \label{fig:airplane_data}
+    \end{figure}
 
-See figure \ref{fig:airplane_data_less_trend}. 
-We can now subtract the long term trend (orange) from the root data (blue) 
-in order to isolate just the error and seasonal components (assuming no 
-cyclical component):
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=8cm]{airplane_data_less_trend}
-    \caption{Airplane data with the trend subtracted.}
-    \label{fig:airplane_data_less_trend}
-\end{figure}
+    See figure \ref{fig:airplane_data_less_trend}. 
+    We can now subtract the long term trend (orange) from the root data (blue) 
+    in order to isolate just the error and seasonal components (assuming no 
+    cyclical component):
+    \begin{figure}[t]
+        \centering
+        \includegraphics[width=8cm]{airplane_data_less_trend}
+        \caption{Airplane data with the trend subtracted.}
+        \label{fig:airplane_data_less_trend}
+    \end{figure}
 
-Sometimes you'll want to take the root data $X_t$ and apply a transformation direcly to it
-in an attempt to end up with linear data. Transformations might also be used to make the variance equal across the series.
-Possible transformations might be $\sqrt{X_t}$, $\sqrt[3]{X_t}$, $log(X_t)$, or $-X_t^{-1}$.
+    Sometimes you'll want to take the root data $X_t$ and apply a transformation direcly to it
+    in an attempt to end up with linear data. Transformations might also be used to make the variance equal across the series.
+    Possible transformations might be $\sqrt{X_t}$, $\sqrt[3]{X_t}$, $log(X_t)$, or $-X_t^{-1}$.
 
-However, the Box-Cox transformation can make our lives easier:
+    However, the Box-Cox transformation can make our lives easier:
 
-\subsection{STA3041F: Box-Cox Transformation}
-If our variance increases over time, then we want to account for this in our model. However, linear methods don't really like dealing with a changing variance. The solution is to take the original data, transform it in some way to remove/reduce how much the variance changes over time, and then proceed to use linear models on the transformed data.
+    \subsection{3041F: Box-Cox Transformation}
+        If our variance increases over time, then we want to account for this in our model. However, linear methods don't really like dealing with a changing variance. The solution is to take the original data, transform it in some way to remove/reduce how much the variance changes over time, and then proceed to use linear models on the transformed data.
 
-Box-Cox is a class of transformations with parameter $\lambda$  that tries to change reduce the amount the variance changes over time.
+        Box-Cox is a class of transformations with parameter $\lambda$  that tries to change reduce the amount the variance changes over time.
 
-The original series $x_1, \dots, x_n$ is transformed into $y_1(\lambda), \dots, y_n(\lambda)$ as follows:
+        The original series $x_1, \dots, x_n$ is transformed into $y_1(\lambda), \dots, y_n(\lambda)$ as follows:
 
-\begin{equation*}
-    y_t(\lambda) =
-    \begin{cases}
-        \frac{x_t^{\lambda} - 1}{\lambda}  & \text{if $\lambda \ne 0$} \\[2ex]
-                                  log(x_t) & \text{if $\lambda = 0$} \\
-    \end{cases}
-\end{equation*}
+        \begin{equation*}
+            y_t(\lambda) =
+            \begin{cases}
+                \frac{x_t^{\lambda} - 1}{\lambda}  & \text{if $\lambda \ne 0$} \\[2ex]
+                                        log(x_t) & \text{if $\lambda = 0$} \\
+            \end{cases}
+        \end{equation*}
 
-Where $\lambda$ has to be estimated, and the resulting transformed data has a more stabilizer variance. 
-\marginpar{\href{https://www.desmos.com/calculator/rnpu3y6lxk}{Desmos Interactive graph of the $\lambda \ne 0$ part of Box-Cox}}
-The larger value of $\lambda$, the stronger the suppressing effect of the transformation.
-Note that taking the limit as $\lambda$ trends to zero results in $log(x_t)$, which is where
-the second case of the piecewise Box-Cox comes in.
-% TODO add some matplotlib graphs showing the effect of different values of lambda
+        Where $\lambda$ has to be estimated, and the resulting transformed data has a more stabilizer variance. 
+        \marginpar{\href{https://www.desmos.com/calculator/rnpu3y6lxk}{Desmos Interactive graph of the $\lambda \ne 0$ part of Box-Cox}}
+        The larger value of $\lambda$, the stronger the suppressing effect of the transformation.
+        Note that taking the limit as $\lambda$ trends to zero results in $log(x_t)$, which is where
+        the second case of the piecewise Box-Cox comes in.
+        % TODO add some matplotlib graphs showing the effect of different values of lambda
 
-Note that the Box-Cox tranformation is equivalent to many others, depending on the value of $\lambda$:
-\begin{itemize}
-    \item When $\lambda = -1$: Inverse tranformation
-    \item When $\lambda = 0$: Natural Log transformation.
-    \item When $\lambda = \frac{1}{2}$: (basically) Square root transformation.
-    \item When $\lambda = \frac{1}{3}$: (basically) Cube root transformation.
-    \item When $\lambda = 1$: (basically) No transformation.
-\end{itemize}
+        Note that the Box-Cox tranformation is equivalent to many others, depending on the value of $\lambda$:
+        \begin{itemize}
+            \item When $\lambda = -1$: Inverse tranformation
+            \item When $\lambda = 0$: Natural Log transformation.
+            \item When $\lambda = \frac{1}{2}$: (basically) Square root transformation.
+            \item When $\lambda = \frac{1}{3}$: (basically) Cube root transformation.
+            \item When $\lambda = 1$: (basically) No transformation.
+        \end{itemize}
 
-% TODO include notes on the application of Box-Cox
+        % TODO include notes on the application of Box-Cox
 
+
+    \subsection{3041F: Another Lecture}
+    \marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=eb6c2126-53cd-484c-a148-4cac57e904f2}{Time Series Video 4}}
 
 
 
