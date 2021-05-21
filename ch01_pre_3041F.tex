@@ -1,0 +1,141 @@
+\section{Common Distributions}
+\subsection{Poisson Distribution}
+\begin{equation*}
+    \begin{aligned}
+        X &\sim Poi(\lambda) \qquad\\
+        \mathbb{E}[X] &= \lambda \\
+        \mathbb{V}[X] &= \lambda \\
+    \end{aligned}
+    \begin{aligned}
+        f_X(x) &= \frac{\lambda^x e^{-\lambda}}{x!} \\
+        \mathbb{E}[s^X] &= e^{\lambda \left(e^s - 1\right)} \\
+        \left(\sum_{i=0}^nPoi(\lambda_i) \right) &\sim Poi \left(\sum_{i=0}^n \lambda_i \right)\\
+    \end{aligned}
+\end{equation*}
+
+\subsection{Negative Binomial Distribution}
+\begin{equation*}
+    \begin{aligned}
+        X &\sim NegBin(p, r) \qquad\\
+        \mathbb{E}[X] &= \frac{r}{p} \\
+        \mathbb{V}[X] &= \frac{rq}{p^2} \\
+    \end{aligned}
+    \begin{aligned}
+        f_X(x) &= \binom{k-1}{r-1}p^rq^{k-r} \\
+        \mathbb{E}[e^{sX}] &= \left(\frac{pe^s}{1 - qe^s}\right)^r \\
+    \end{aligned}
+\end{equation*}
+
+\subsection{Geometric Distribution}
+\begin{equation*}
+    \begin{aligned}
+        X &\sim Geo(p) \qquad\\
+        \mathbb{E}[X] &= \frac{1}{p} \\
+        \mathbb{V}[X] &= \frac{q}{p^2} \\
+    \end{aligned}
+    \begin{aligned}
+        f_X(x) &= pq^{x-1}              \\
+        \mathbb{E}[e^{sX}] &= \frac{e^tp}{1 - e^tq} \\
+    \end{aligned}
+\end{equation*}
+
+\subsection{Binomial Distribution}
+\begin{equation*}
+    \begin{aligned}
+        X &\sim Binomial(n, p) \qquad\\
+        \mathbb{E}[X] &= np \\
+        \mathbb{V}[X] &= npq \\
+    \end{aligned}
+    \begin{aligned}
+        f_X(x) &= \binom{n}{x} p^x q^{n-x} \\
+        \mathbb{E}[e^{sX}] &= (1 - p + pe^s)^n \\
+    \end{aligned}
+\end{equation*}
+
+\subsection{Beta Distribution}
+\(0 < x < 1\)
+\begin{equation*}
+    \begin{aligned}
+        X &\sim Beta(a, b) \qquad\\
+        \mathbb{E}[X] &= \frac{a}{a + b} \\
+        \mathbb{V}[X] &= \frac{ab}{(a + b)^2(a + b + 1)}\\
+    \end{aligned}
+    \begin{aligned}
+        f_X(x) &= \frac{(a + b - 1)!}{(a - 1)! (b - 1)!} \cdot x^{a-1} (1 - x)^{b-1} \\
+    \end{aligned}
+\end{equation*}
+
+\subsection{Normal Distribution}
+\begin{equation*}
+    \begin{aligned}
+        X &\sim N(\mu, \sigma^2) \qquad\\
+        \mathbb{E}[X] &= \mu \\
+        \mathbb{V}[X] &= \sigma^2 \\
+    \end{aligned}
+    \begin{aligned}
+        f_X(x) &= \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{1}{2}\left(\frac{x - \mu}{\sigma}\right)^2} \\
+        \mathbb{E}[e^{sX}] &= e^{\mu s + \frac{1}{2}s^2\sigma^2} \\
+    \end{aligned}
+\end{equation*}
+
+\subsection{Gamma Distribution}
+\(\lambda > 0, \alpha > 0 \)
+\begin{equation*}
+    \begin{aligned}
+        X &\sim Gamma(\lambda, \alpha) \qquad\\
+        \mathbb{E}[X] &= \frac{\alpha}{\lambda} \\
+        \mathbb{V}[X] &= \frac{\alpha}{\lambda^2} \\
+    \end{aligned}
+    \begin{aligned}
+        f_X(x) &= \frac{\lambda^\alpha x^{\alpha - 1} e^{-\lambda x}}{(\alpha - 1)!} \\
+        \mathbb{E}[e^{sX}] &= \left(\frac{\lambda}{\lambda - s}\right)^\alpha \\
+    \end{aligned}
+\end{equation*}
+
+\subsubsection{Notes}
+Sum of independant Exponentials is Gamma distributed:
+\begin{equation*}
+    \left(\sum^{n} Exp(\lambda) \right) \sim Gamma(\lambda, n) 
+\end{equation*}
+\begin{equation*}
+    Exp(\lambda) \equiv Gamma(\lambda, 1) 
+\end{equation*}
+
+
+\subsection{Exponential Distribution}
+\begin{equation*}
+    \begin{aligned}
+        X &\sim Exp(\lambda) \qquad\\
+        \mathbb{E}[X] &= \frac{1}{\lambda} \\
+        \mathbb{V}[X] &= \frac{1}{\lambda^2} \\
+        \hat{\lambda}_{MLE} &= \frac{1}{\bar{x}} \\
+    \end{aligned}
+    \begin{aligned}
+        f_X(x) &= \lambda e^{-\lambda x} \quad x \ge 0, \lambda > 0 \\
+        F_X(x) &= 1 - e^{-\lambda x} \\
+        \mathbb{E}[e^{sX}] &= \frac{\lambda}{\lambda - s} \quad s < \lambda \\
+        \mathbb{P}[Exp(\lambda_1) < Exp(\lambda_2)] &= \frac{\lambda_1}{\lambda_1 + \lambda_2}\\
+    \end{aligned}
+\end{equation*}
+
+\subsection{Chi-Squared Distribution}
+Work in progress
+\section{Generating Functions}
+\subsection{Probability Generating Functions}
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{G}_X(s) :&= \mathbb{E}[s^X] \\
+                         &= \sum_{x = 0}^\infty s^x \cdot f_X(x) \\
+        \mathbb{G}_X(0)  &= f_X(0) = \mathbb{P}[X=0] \\
+        \mathbb{G}_X(1)  &= \sum_{x = 0}^\infty 1^x \cdot f_X(x) \\
+                         &= 1 \\
+        \mathbb{E}[X] &= \mathbb{G}_X'(1)  \\
+        \mathbb{V}[X] &= \mathbb{G}_X''(1) + \mathbb{G}_X'(1) - \left(\mathbb{G}_X'(1)\right)^2 \\
+    \end{aligned}
+\end{equation*}
+
+
+\subsection{Moment Generating Functions}
+Work in progress.
+\section{Infinite Sums}
+Work in progress.

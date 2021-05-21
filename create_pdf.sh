@@ -17,4 +17,4 @@ for script in ./scripts/*; do
 done
 echo 'Compiling LaTeX...'
 # Run it twice to make sure the images all get referenced correctly.
-pdflatex STA3041F_Notes.tex && pdflatex STA3041F_Notes.tex > /dev/null && echo 'All Complete'
+pdflatex STA3041F_Notes.tex && pdflatex STA3041F_Notes.tex > /dev/null && echo 'All Complete' && rm *.aux *.toc *.log *.out

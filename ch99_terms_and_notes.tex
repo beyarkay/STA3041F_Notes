@@ -1,0 +1,68 @@
+    \section{Terms and Definitions}
+    \paragraph{Absorbing} Once you're in an absorbing state, it's impossible to leave.
+    \paragraph{Accessible} State j is accessible from state i if there exists n greater than 0 such that the probability of going from j to i in n steps is greater than zero.
+    \paragraph{Autocovariance} Covariance of a given random variable with itselve, but at different points in time.
+    \paragraph{Closed Sets} A subset of the set of all possible states, which entered cannot be exited.
+    \paragraph{Communicate} States i and j communicate if they are both accessible from each other. By convention, evey state communicates with itself.
+    \paragraph{Cross-sectional Data} All features are collected at a single period in time. All measurements are independant
+    \paragraph{Decomposition Theorem} The state space can be partitioned uniquely into one set of transient states (although this need not be an equivalence class), and several closed irreducible sets of recurrant states.
+    \paragraph{Equivalence Class} A set of states in which all states communicate.
+    \paragraph{Ergodic} A class that's both aperiodic and positively persistent.
+    \paragraph{Interarrival Time} The duration between event \(i\) and \(i+1\), or the sequence of all such events.
+    \paragraph{Irreducible Chain} When the state space of the chain is an irreducible class.
+    \paragraph{Irreducible Class} A set that's both closed and an equivalence class
+    \paragraph{Limiting Distribution} If a Markov Chain has a limiting distribution, then after enough time steps the chain will end up at this distribution regardless of starting state.
+    \paragraph{Periodic} A state i is periodic with period k if the probability of first passage back to i in some number of steps n is equal to zero for all \(n \% k \ne 0\).
+    \paragraph{Persistent, null} A recurrant state in a chain with infinite total states and therefore the mean recurrance time infinite.
+    \paragraph{Persistent, positively} A recurrant state in a chain with finite total states and therefore the mean recurrance time is less than infinity.
+    \paragraph{Recurrant State} Starting at a recurrent state i, and given infinite time, you will return to state i with probability 1.
+    \paragraph{Recurrant} An equivalence class with 1 or more recurrant states.
+    \paragraph{Regular Chain} Given enough steps, you can visit every state, regardless of which state you start out at. This implies \(W^n\) only has positive entries.
+    \paragraph{Reversibility} A stochastic matrix is reversible with respect to a given distribution if stepping forwards or backwards in time has no effect on the distribution.
+    \paragraph{Stationary Distribution} When the marginal distribution doesn't change over time.
+    \paragraph{Time Series Data} Features are measured at multiple points in time. Measurements in the future are often dependant on the measurements in the past.
+    \paragraph{Time Series} A particular realisation of a stochastic process.
+    \paragraph{Transient State} Starting at transient state i, the average time until first passage back to i is infinite, and we say the passage is uncertain.
+    \section{R trickery}
+    Useful functions:
+    \subsection{runif}
+    runif(n): list of `n` Random uniform distribution variables
+    \subsection{cumsum} cumsum(sequence): cumulative sum of the given `sequence`
+    \subsection{plot} plot(x~y): Plot a plot of x vs y
+    \begin{itemize}
+        \item type="", type of plot should be drawn.  Possible types are
+            \begin{itemize}
+                \item "p" for *p*oints,
+                \item "l" for *l*ines,
+                \item "b" for *b*oth,
+                \item "c" for the lines part alone of ‘"b"’,
+                \item "o" for both ‘*o*verplotted’,
+                \item "h" for ‘*h*istogram’ like (or ‘high-density’) vertical lines,
+                \item "s" for stair *s*teps,
+                \item "S" for other *s*teps, see ‘Details’ below,
+                \item "n" for no plotting.
+            \end{itemize}
+        \item ‘main’ an overall title for the plot: see ‘title’.
+        \item ‘sub’ a sub title for the plot: see ‘title’.
+        \item ‘xlab’ a title for the x axis: see ‘title’.
+        \item ‘ylab’ a title for the y axis: see ‘title’.
+        \item ‘asp’ the y/x aspect ratio, see ‘plot.window’.
+    \end{itemize}
+
+    \subsection{ts}
+    ts(data = NA, start = 1, end = numeric(), frequency = 1, deltat = 1, ts.eps = getOption("ts.eps"), class = , names = )
+
+    The function ‘ts’ is used to create time-series objects.
+    ‘as.ts’ and ‘is.ts’ coerce an object to a time-series and test
+    whether an object is a time series.
+
+    \section{Notes}
+    These should eventually all be categorised, but for now they're all lumped together here.
+
+    An irreducible chain implies it has a unique stationary distribution.
+
+    Trace of a matrix is equal to the sum of it's eigenvalues
+
+    A Markov Matrix always has 1 as an eigenvalue
+
+    Diagonalization: \(D = PAP^{-1}\)
