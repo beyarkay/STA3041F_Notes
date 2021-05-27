@@ -1,0 +1,113 @@
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=41fa68b6-33c6-479e-b4a6-9909d6ec7edb}{Time Series Video 8}}
+\section{3041F: Time Series II Intro}
+We'll be covering:
+\begin{itemize}
+    \item Stationarity, strict and weak variants.
+    \item Autocorrelation: Measure the same variable but at different time points, and calculate the correlation between those timepoints
+    \item Autocovariance
+    \item Linear Time series models (moving average, autoregressive process, autoregressive moving average process)
+\end{itemize}  
+
+\section{Stationarity}
+\subsection{Strict Stationarity}
+Strict stationarity is a property of a time series.
+\begin{itemize}
+    \item A time series is strictly stationary iff for every offset parameter
+        $m > 0$, all time points $t_1, \dots, t_n$, the joint distribution of
+        $Z_{t_1}, \dots, Z_{t_n}$ is equal to that of $Z_{t_1 - m},
+        \dots, Z_{t_n-m}$.
+    \item We also require that if there are two points, $Z_t$ and  $Z_{t+m}$
+        then  the distribution of the random vector  $\left( Z_t,
+        Z_{t+m}\right)$ must be a function of the \textbf{lag} $|m|$.
+    \item Given a timeline of a time series and an offset parameter $m$ 
+    \item Consider Random Variables $Z_{t_1}, \dots, Z_{t_n}$, find the joint
+        distribution of them all, then apply a timeshift by the offset
+        parameter $m$: $Z_{t_{1-m}}, \dots, Z_{t_{n-m}}$.
+    \item then if the joint distribution of the first set of Random variables
+        is equal to that the joint distribution of the second set of random
+        variables, then the time series is said to be \textbf{Strictly
+        Stationary}.
+\end{itemize}
+
+Define the \textbf{Autocovariance} as the covariance of the same random
+variable but at different time points:
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{C}ov[Z_t, Z_{t+m}] &:= \gamma_{|m|} \\
+        &\text{Also note that:} \\
+        \gamma_m = \gamma_{-m}
+    \end{aligned}
+\end{equation*}
+We can use $|m|$ because Covariance doesn't depend on the order of
+the random variables given to it. 
+
+Define the \textbf{Autocorrelation} as the autocovariance divided by the
+variance of a time series. Also define that variance with the symbol $\gamma_0
+:=  \mathbb{V}[Z_t] $. Then the Autocorrelation (given the offset parameter
+$m$) $\rho_m$ is defined by:
+\begin{equation*}
+    \begin{aligned}
+        \rho_m &= \frac{\gamma_m}{\gamma_0} \\
+        \rho_0 &= \frac{\gamma_0}{\gamma_0} = 1 \\
+    \end{aligned}
+\end{equation*}
+
+
+\subsection{Weak Stationarity}
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=c9dbfa7f-7ba8-4145-8037-26bdd235fd17}{Time Series Video 9}}
+
+Weak stationarity is defined by orders (order 1, order 2, etc). So to have weak
+stationarity of order $n$, the time series must have equal $n$-th moments.
+For example, weak stationarity of order 1 requires a constant expectation.
+
+Weak Stationarity of order 2 requires 
+\begin{itemize}
+    \item A constant expectation.
+    \begin{equation*}
+        \mathbb{E}[Z_t] = \mathbb{E}[Z_{t-m}]  \forall m
+    \end{equation*}
+        
+    \item the autocovariance to only depend on the offset parameter $m$. For
+        example, where $t$ and $s$ are valid indices to the time series $Z$:
+    \begin{equation*}
+        \mathbb{C}ov[Z_t, Z_{t-m}] = \mathbb{C}ov[Z_s, Z_{s-m}] 
+    \end{equation*}
+\end{itemize}
+Therefore Weak Stationary of order 2 implies Weak Stationarity of order 1.
+
+\subsection{Some examples of Weak stationarity}
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=364aeb35-5750-4eb1-b844-93a239f8f81a}{Time Series Video 10}}
+If we define a time series as $y_t = e_t - \frac{1}{2}e_{t-1}$ with all error
+terms independant and $e_t \sim N(0, \sigma^2)$ then:
+
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{E}[y_t] &= \mathbb{E}[e_t - \frac{1}{2}e_{t-1}] = 0 + 0 = 0 \\
+        \gamma_0 &= \mathbb{E}[\left( e_t - \frac{1}{2}e_{t-1}\right)] - \mathbb{E}[y_t] \mathbb{E}[y_t]  \\
+                 &= \dots \\
+                 &= \sigma^2(1 + 0.25) + 0 \cdot 0 \\
+                 &= 1.25 \sigma^2 \\
+        \gamma_1 &= \mathbb{C}ov[y_t, y_{t-1}] \\
+                 &= \mathbb{E}[\left( y_t \right) \left( y_{t-1}\right)] -
+                 0 \cdot 0\\
+                 &= \dots \\
+                 &= -0.5\sigma^2 \\
+        \gamma_k &= \mathbb{E}[y_t \cdot y_{t-k}]  - 0 \cdot 0\\
+                 &= \mathbb{E}[\left( e_t - \frac{1}{2}e_{t-1} \right) \left(
+                 e_{t-k} - \frac{1}{2}e_{t-1-k} \right)] \\
+                 &= 0 - \frac{1}{2} \cdot 0 - \frac{1}{2} \cdot  0 +
+                 \frac{1}{4} \cdot 0 \\
+                 &= 0\\
+    \end{aligned}
+\end{equation*}
+
+\subsection{Time Series Video 11}
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=929c1592-39cf-4d0d-9678-cdb3bf6f278b}{Time Series Video 11}}
+
+\subsection{Time Series Video 12}
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=7322200d-179b-4704-970c-e17c8cc40f66}{Time Series Video 12}}
+
+\subsection{Time Series Video 13}
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=3aadc357-4876-4b61-bb69-4d6ac7347aeb}{Time Series Video 13}}
+
+
