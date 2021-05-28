@@ -12,6 +12,13 @@
         \left(\sum_{i=0}^nPoi(\lambda_i) \right) &\sim Poi \left(\sum_{i=0}^n \lambda_i \right)\\
     \end{aligned}
 \end{equation*}
+%See figure \ref{fig:distribution_poisson}.
+%\begin{figure}[t]
+%    \centering
+%    \includegraphics[width=12cm]{distribution_poisson}
+%    \caption{The poisson distribution with parameter $\lambda$}
+%    \label{fig:distribution_poisson}
+%\end{figure}
 
 \subsection{Negative Binomial Distribution}
 \begin{equation*}
@@ -25,6 +32,13 @@
         \mathbb{E}[e^{sX}] &= \left(\frac{pe^s}{1 - qe^s}\right)^r \\
     \end{aligned}
 \end{equation*}
+%See figure \ref{fig:distribution_neg_binomial}.
+%\begin{figure}[t]
+%    \centering
+%    \includegraphics[width=12cm]{distribution_neg_binomial}
+%    \caption{The Negative binomial distribution with parameters p and r}
+%    \label{fig:distribution_neg_binomial}
+%\end{figure}
 
 \subsection{Geometric Distribution}
 \begin{equation*}
@@ -38,6 +52,13 @@
         \mathbb{E}[e^{sX}] &= \frac{e^tp}{1 - e^tq} \\
     \end{aligned}
 \end{equation*}
+%See figure \ref{fig:distribution_geometric}.
+%\begin{figure}[t]
+%    \centering
+%    \includegraphics[width=12cm]{distribution_geometric}
+%    \caption{The Geometric distribution with parameter p}
+%    \label{fig:distribution_geometric}
+%\end{figure}
 
 \subsection{Binomial Distribution}
 \begin{equation*}
@@ -51,6 +72,13 @@
         \mathbb{E}[e^{sX}] &= (1 - p + pe^s)^n \\
     \end{aligned}
 \end{equation*}
+See figure \ref{fig:distribution_binomial}.
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=12cm]{distribution_binomial}
+    \caption{The binomial distribution with parameters n and p}
+    \label{fig:distribution_binomial}
+\end{figure}
 
 \subsection{Beta Distribution}
 \(0 < x < 1\)
@@ -64,6 +92,13 @@
         f_X(x) &= \frac{(a + b - 1)!}{(a - 1)! (b - 1)!} \cdot x^{a-1} (1 - x)^{b-1} \\
     \end{aligned}
 \end{equation*}
+See figure \ref{fig:distribution_beta}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=12cm]{distribution_beta}
+    \caption{The Beta distribution with parameters a and b.}
+    \label{fig:distribution_beta}
+\end{figure}
 
 \subsection{Normal Distribution}
 \begin{equation*}
@@ -77,6 +112,13 @@
         \mathbb{E}[e^{sX}] &= e^{\mu s + \frac{1}{2}s^2\sigma^2} \\
     \end{aligned}
 \end{equation*}
+%See figure \ref{fig:distribution_normal}.
+%\begin{figure}[t]
+%    \centering
+%    \includegraphics[width=12cm]{distribution_normal}
+%    \caption{The normal distribution with parameters $\mu$ and $\sigma^2$}
+%    \label{fig:distribution_normal}
+%\end{figure}
 
 \subsection{Gamma Distribution}
 \(\lambda > 0, \alpha > 0 \)
@@ -91,6 +133,14 @@
         \mathbb{E}[e^{sX}] &= \left(\frac{\lambda}{\lambda - s}\right)^\alpha \\
     \end{aligned}
 \end{equation*}
+%See figure \ref{fig:distribution_gamma}.
+%\begin{figure}[t]
+%    \centering
+%    \includegraphics[width=12cm]{distribution_gamma}
+%    \caption{The Gamma distribution with parameters $\lambda$ and $\alpha$}
+%    \label{fig:distribution_gamma}
+%\end{figure}
+
 
 \subsubsection{Notes}
 Sum of independant Exponentials is Gamma distributed:
@@ -117,11 +167,43 @@ Sum of independant Exponentials is Gamma distributed:
         \mathbb{P}[Exp(\lambda_1) < Exp(\lambda_2)] &= \frac{\lambda_1}{\lambda_1 + \lambda_2}\\
     \end{aligned}
 \end{equation*}
+%See figure \ref{fig:distribution_exponential}.
+%\begin{figure}[t]
+%    \centering
+%    \includegraphics[width=12cm]{distribution_exponential}
+%    \caption{The exponential distribution with parameter $\lambda$}
+%    \label{fig:distribution_exponential}
+%\end{figure}
 
+\subsection{Student's t-distribution}
+Work in progress.
 \subsection{Chi-Squared Distribution}
-Work in progress
+The $\chi^2_m$ Distribution is defined as having  $m$ degrees of freedom, and
+is usually defined in terms of a sum of standard normal distributions. ie if
+$Z_i \sim N(0, 1) \quad \forall i \in 1 \dots k$ and all $Z_i$ independent.
+then:
+\begin{equation*}
+    \begin{aligned}
+        \sum_{n=1}^{k} (Z_i)^2 &\sim \chi^2_{k-1} \\
+        \mathbb{E}[\chi^2_k] &= k\\
+        \mathbb{V}[\chi^2_k] &= 2k\\
+        \mathbb{M}_{\chi^2_k}(t) &= (1-2t)^{-\frac{k}{2}} \quad \text{for}
+        t < \frac{1}{2}\\
+        \chi^2_2 &\equiv Exp(\frac{1}{2}) \\
+        -2\ln{U(0, 1)} &\equiv \chi^2_2 \\
+                       &\equiv Exp(\frac{1}{2})\\
+        \text{And if } X_1 \sim \chi^2_a, X_2 \sim \chi^2_b, X_1 \indep X_2 & \\
+        \frac{X_1}{X_1 + X_2} &\equiv Beta(\frac{a}{2}, \frac{b}{2}) \\
+        \frac{\frac{\chi^2_a}{a}}{\frac{\chi^2_b}{b}} &\equiv F_{a, b} \\
+        \text{and if $X_i$ are all independent with degrees of freedom $f_i$}&\\
+        \sum_{i=1}^{k} \chi^2_{f_i} &\equiv \chi^2_{\sum_{i=1}^{k} f_i } \\
+    \end{aligned}
+\end{equation*}
+
 \section{Generating Functions}
 \subsection{Probability Generating Functions}
+If X is a non-negative, integer-valued, and discrete, then the probability
+generating function of X is given by:
 \begin{equation*}
     \begin{aligned}
         \mathbb{G}_X(s) :&= \mathbb{E}[s^X] \\
@@ -134,8 +216,176 @@ Work in progress
     \end{aligned}
 \end{equation*}
 
-
 \subsection{Moment Generating Functions}
-Work in progress.
-\section{Infinite Sums}
-Work in progress.
+The Moment Generating Function of X is defined by:
+\begin{equation*}
+    \begin{aligned}
+        M_X(t) :&= \mathbb{E}[e^{tX}] \\
+                &= \int_{-\infty}^{\infty} e^{tx} \cdot f_X(x) \,dx 
+    \end{aligned}
+\end{equation*}
+But the MGF might not always exists. We can also define its complex-numbered
+version, the Characteristic Function, which will always exist:
+\begin{equation*}
+    \begin{aligned}
+        \varphi_(t) :&= \mathbb{E}[e^{itX}] \\
+                &= \int_{-\infty}^{\infty} e^{itx} \cdot f_X(x) \,dx 
+    \end{aligned}
+\end{equation*}
+
+The $r$-th moment of X can be retrieved by taking the $r$-th derivative of the
+MGF and evaluating it at zero. A similar process also works for the
+characteristic function:
+\begin{equation*}
+    \begin{aligned}
+        \text{$r$-th Moment of X} &= \mathbb{E}[X^r] \\
+                                  &= \frac{d^r}{dX^r} M_X(0) \\
+                                  &= (-i)^r \frac{d^r}{dX^r} \varphi_X(0) \\
+    \end{aligned}
+\end{equation*}
+
+
+
+\section{Probability}
+The Law of Total Probability is given as:
+\begin{equation*}
+    \mathbb{P}[A] = \sum_{n=1}^{\infty} \mathbb{P}[A|B_n] \mathbb{P}[B_n] 
+\end{equation*}
+Bayes Theorem:
+\begin{equation*}
+    \mathbb{P}[A | B] = \frac{ \mathbb{P}[B|A] \mathbb{P}[A]  }{ \mathbb{P}[B] }
+\end{equation*}
+
+
+
+
+\section{Expectation and Variance}
+Expectation is always taken with respect to a random variable (a bit like you
+always differentiate with respect to a certain variable in an equation). 
+
+If the random variable is not obvious, then the Expectation of some function
+g(X) with respect to X (which has probability density function given by
+$f_X(x)$) is written like $\mathbb{E}_X[g(X)]$ and is defined as:
+\begin{equation*}
+    \mathbb{E}[g(X)] = \int_{-\infty}^{\infty} g(x) \cdot f_X(x) \,dx 
+\end{equation*}
+So for example, if $g(x) = x^2$ then we can calculate the Expectation of $X^2$
+as:
+
+\begin{equation*}
+    \mathbb{E}[X^2] = \int_{-\infty}^{\infty} x^2 \cdot f_X(x) \,dx 
+\end{equation*}
+
+And in the special case where $X$ is non-negative and absolutely continuous, we
+have the identity:
+\begin{equation*}
+    \mathbb{E}[X] = \int_{0}^{\infty} \mathbb{P}[\{X > x\}]  \,dx 
+\end{equation*}
+
+Note that expectation is a linear transformation, such that the following is
+true (Assuming that both expectations are finite):
+\begin{equation*}
+    \mathbb{E}[aX + bY] = a \mathbb{E}[X] + b \mathbb{E}[Y] 
+\end{equation*}
+
+Variance can be calculated as: 
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{V}[X] &= \mathbb{E}[\left( X - \mu_X \right)^2]  \\
+        &= \mathbb{E}[X^2] - (\mathbb{E}[X])^2 \\
+    \end{aligned}
+\end{equation*}
+
+\section{Random Vectors, Covariance, Correlation}
+So as to not get lost in a sea of brackets, define the following:
+\begin{equation*}
+    \begin{aligned}
+        \mu_X &= \mathbb{E}[X] \\
+        \mu_Y &= \mathbb{E}[Y] \\
+        \sigma_X^2 &= \mathbb{V}[X] \\
+        \sigma_Y^2 &= \mathbb{V}[Y] \\
+        \sigma_{XY} &= \mathbb{C}ov[X, Y]  \\
+        \rho_{XY} &= \mathbb{C}orr[X, Y]  \\
+    \end{aligned}
+\end{equation*}
+
+With the prior definitions, the following are useful identities, definitions,
+or shortcuts relating to Covariance and Correlation:
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{C}ov[X, Y] &= \mathbb{E}[(X - \mu_x)\cdot(Y - \mu_Y)] \\
+                  &= \mathbb{E}[XY] - \mathbb{E}[X] \cdot \mathbb{E}[Y] \\
+        \mathbb{C}ov[X, a] &= 0 \quad \text{a } \in \mathbb{R} \\
+        \mathbb{C}ov[X, Y] &= \mathbb{C}ov[Y, X] \\
+        \mathbb{C}orr[X, Y] &= \frac{\sigma_{XY}}{\sigma_X \cdot \sigma_Y}\\
+            &= \frac{ \mathbb{C}orr[X, Y] }{ \sqrt{ \mathbb{V}[X] \cdot \mathbb{V}[Y] }} \\
+        \mathbb{C}ov[X_1, X_2] &= 0 \qquad \text{if $X_1$ is independant of
+        $X_2$}\\
+    \end{aligned}
+\end{equation*}
+    
+
+\section{MAM1000W things}
+\begin{equation*}
+    \begin{aligned}
+        e^x = \sum_{n=0}^{\infty} \frac{x^n}{n!}  \\
+            &= 1 + x + \frac{x^2}{2} + \frac{x^3}{3!} + \dots \\
+            &= \lim_{n\to\infty} \left(1 + \frac{x}{n} \right)^n \\
+        e^{i\theta} &= \cos\theta + i\sin\theta \\
+    \end{aligned}
+\end{equation*}
+
+\section{Conditioning}
+The definition of a conditional distribution is given by:
+\begin{equation*}
+    f_{X|Y}(x|y) = \frac{f_{xy}(x, y)}{f_Y(y)}
+\end{equation*}
+And conditional probability by:
+\begin{equation*}
+    \mathbb{P}[A|B] = \frac{ \mathbb{P}[A \cap B]}{ \mathbb{P}[B] }
+\end{equation*}
+Conditional Expectation identities and definitions:
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{E}[X|Y=y] &= \int_{-\infty}^{\infty} x \cdot f_{X|Y}(x|y) \,dx \\
+        \mathbb{E}[g(X)|X=x] &= g(x) \\
+        \mathbb{E}[c | X] &= c \\
+        \mathbb{E}[aX + bY | Z] &= a \mathbb{E}[X|Z] + b \mathbb{E}[Y|Z] \\
+        \mathbb{E}[g(X, Y) | Y=y] &= \mathbb{E}[g(X, y) | Y=y] \\
+        \explain{\mathbb{E}[g(X_1, X_2) | X_2=x_2]}{If $X_1 \indep X_2$} &= \mathbb{E}[g(X_1, x_2) | X_2=x_2] \\
+    \end{aligned}
+\end{equation*}
+
+Expectation can be re-written as:
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{E}_X[X] &= \mathbb{E}_Y[ \mathbb{E}_{X|Y}[X|Y] ] \\
+            &= \int_{-\infty}^{\infty} \mathbb{E}[X|Y=y] \cdot f_Y(y) \,dy \\
+    \end{aligned}
+\end{equation*}
+
+Variance can be re-written as:
+\begin{equation*}
+    \mathbb{V}_X[X] = \mathbb{E}_Y[ \mathbb{V}_{X|Y}[X|Y] ] + \mathbb{V}_Y[
+    \mathbb{E}_{X|Y}[X|Y] ] 
+\end{equation*}
+
+
+\section{Sum Trickery}
+\begin{equation*}
+    \begin{aligned}
+        \sum_{i=n}^{\infty} g(x)^i &= \frac{g(x)^n}{1 - g(x)} \qquad \text{if}
+        |g(x)| < 1 \\
+    \end{aligned}
+\end{equation*}
+And, if $0 < r < 1$:
+\begin{equation*}
+    \begin{aligned}
+        \sum_{i=1}^\infty a r^i &= \frac{a}{1 - r} \\
+        a \sum_{i=0}^{\infty} ir^i &= \frac{ar}{(1-r)^2}\\
+        \sum_{i=0}^n i &= \frac{1}{2} n(n+1)\\
+        \sum_{i=0}^{n} i^3 &= \left(  \frac{1}{2} n (n+1)\right)^2 \\
+    \end{aligned}
+\end{equation*}
+
+
