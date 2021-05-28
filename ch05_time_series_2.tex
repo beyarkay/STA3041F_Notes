@@ -1,5 +1,5 @@
-\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=41fa68b6-33c6-479e-b4a6-9909d6ec7edb}{Time Series Video 8}}
 \section{3041F: Time Series II Intro}
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=41fa68b6-33c6-479e-b4a6-9909d6ec7edb}{Time Series Video 8}}
 We'll be covering:
 \begin{itemize}
     \item Stationarity, strict and weak variants.
@@ -29,21 +29,24 @@ Strict stationarity is a property of a time series.
         Stationary}.
 \end{itemize}
 
+\subsection{Autocovariance}
 Define the \textbf{Autocovariance} as the covariance of the same random
 variable but at different time points:
 \begin{equation*}
     \begin{aligned}
-        \mathbb{C}ov[Z_t, Z_{t+m}] &:= \gamma_{|m|} \\
+        \mathbb{C}ov[Z_t, Z_{t+m}] &:= \gamma_{|m|} \\ 
+                &= \mathbb{E}[Z_t \cdot Z_{t+m}] - \mathbb{E}[Z_t] \cdot
+                \mathbb{E}[Z_{t+m}] \\
         &\text{Also note that:} \\
         \gamma_m = \gamma_{-m}
+        \mathbb{V}[Z_t] &= \gamma_0 \\
     \end{aligned}
 \end{equation*}
 We can use $|m|$ because Covariance doesn't depend on the order of
 the random variables given to it. 
 
 Define the \textbf{Autocorrelation} as the autocovariance divided by the
-variance of a time series. Also define that variance with the symbol $\gamma_0
-:=  \mathbb{V}[Z_t] $. Then the Autocorrelation (given the offset parameter
+variance of a time series. The autocorrelation (given the offset parameter
 $m$) $\rho_m$ is defined by:
 \begin{equation*}
     \begin{aligned}
@@ -101,13 +104,114 @@ terms independant and $e_t \sim N(0, \sigma^2)$ then:
     \end{aligned}
 \end{equation*}
 
-\subsection{Time Series Video 11}
+\subsection{More examples, introducing the autoregressive process}
 \marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=929c1592-39cf-4d0d-9678-cdb3bf6f278b}{Time Series Video 11}}
 
-\subsection{Time Series Video 12}
+We'll introduce the autoregressive (AR) process as having parameter $|\phi| <
+1$ and being a time series like:
+\begin{equation*}
+    y_t = \phi y_{t-1} + e_t 
+\end{equation*}
+Which implies that the expectation can be calculated as:
+\begin{equation*}
+    \mathbb{E}[y_t] = \dots = \phi \mathbb{E}[y_{t-1}] 
+\end{equation*}
+So now we've got a self-referencial statement where the expectation at time
+$t$ depends on the expectation at time $t-1$. This can collapse to become:
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{E}[y_t] &= \lim_{h\to\infty} \phi^h \mathbb{E}[y_{t-h}]  \\
+            &= 0 \cdot \mathbb{E}[y_{t-h}]  \\
+            &= 0 \\
+    \end{aligned}
+\end{equation*}
+And the variance will similarily be self-referencial, and collapse to give us:
+\begin{equation*}
+    \mathbb{V}[y_t] = \dots = \phi^{2h} \mathbb{V}[y_{t-h}] + \sigma^2
+    \sum_{i=0}^{h-1} \phi^{2i}
+\end{equation*}
+And so taking the limit as $h\to\infty$:
+ \begin{equation*}
+     \begin{aligned}
+         \mathbb{V}[y_t] &= \sigma^2 \sum_{i=0}^{h-1} \phi^{2i}\\
+                         &= \frac{\sigma^2}{1 - \phi^2} \\
+     \end{aligned}
+\end{equation*}
+
+\section{Autocorrelation}
+Given a certain time series like $X_t = (x_1, \dots, x_n)$ we can
+calculate the autocorrelation for offset $m$ like so:
+\begin{equation*}
+    \hat{\rho}_m = \mathbb{C}orr[X_t, X_{t-m}] = \frac{
+        \sum_{t=m+1}^{n} \left( X_t - \bar{X} \right) \left( X_{t-m} - \bar{X} \right)
+        }{
+        \sum_{t=1}^{n} \left( X_t - \bar{X}\right)^2
+        }
+\end{equation*}
+A \textbf{Correlogram} is a plot with $m$ on the x axis and the $m$-th lagged
+autocorrelations on the y axis.
+
+\section{Significance testing of Autocorrelation}
 \marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=7322200d-179b-4704-970c-e17c8cc40f66}{Time Series Video 12}}
+Note that when you calculate autocorrelation with an offset of $m$, you'll lose
+exactly $m$ data points. For example, in calculating the autocorrelation with
+$m=1$, there is no $Z_{t_0}$ data point to match up with the  $Z_{t_1}$ data
+point.
 
-\subsection{Time Series Video 13}
+Today we look at the statistical significance of each of the $m$
+autocorrelations. If the underlying process is a moving average process, then
+the number of statistically significant autocorrelations is equal to the order
+of that moving average process.
+
+Recall that the $m$-th autocorrelation is defined as:
+\begin{equation*}
+    \hat{\rho}_m = \frac{
+        \sum_{t=m+1}^{n} \left( X_t - \bar{X} \right) \left( X_{t-m} - \bar{X} \right)
+        }{
+        \sum_{t=1}^{n} \left( X_t - \bar{X}\right)^2
+        }
+\end{equation*}
+Now we can form a standard normal random variable by subtracting the mean and
+dividing by the sample variation. We have to find the distribution of
+$\hat{\rho}_m$ numerically, by simulating the histogram many many times (No
+easy analytical solution exists). After doing this, we find:
+\begin{equation*}
+    \hat{\rho}_m \sim N(0, \frac{1}{n})
+\end{equation*}
+And so we can construct a standard normal like so:
+\begin{equation*}
+    Z = \frac{\hat{\rho}_m - 0}{\frac{1}{\sqrt{n}}}
+\end{equation*}
+
+\subsection{Hypothesis tests with Autocorrelation}
+We know that $\hat{\rho}_m \sim N(0, \frac{1}{n})$ (as $n\to\infty$).  Thus if
+$|\hat{\rho}_m| > \frac{t_{\alpha/2}}{\sqrt{n}}$ we would reject $H_0: \rho_m =
+0$ at the  $\alpha$ significance level (where $t_{\alpha/2}$ is the usual value
+from student's t-distribution).
+
+The \textbf{Bartlett's Test} is the same as above, except we reject $H_0$ if
+$|\hat{\rho}_m| > \frac{2}{\sqrt{n}}$ because fuck accuracy.
+
+The \textbf{Portmanteau test} allows us to also test more complicated
+hypotheses such as:
+\begin{equation*}
+    \begin{aligned}
+        H_0: \hat{\rho}_i &= 0 \quad \forall i \in \{1, 2, \dots, k\} \\
+        H_1: \hat{\rho}_i &\ne 0 \quad \text{For at least one} i \in \{1, 2, \dots, k\} \\
+    \end{aligned}
+\end{equation*}
+Recalling that the sum of squared independent standard normals is
+chi-square distributed, we define the Portmanteau test for offset $m$ as:
+\begin{equation*}
+    \explain{Q(m) = n \sum_{i=1}^{m} \hat{\rho}_i^2}{$\sim \chi^2_m$}
+\end{equation*}
+So now we've got a chi-squared distribution, we can look up the value of $Q(m)$
+in the tables.
+
+\subsection{The Backshift Operator}
+We define the \textbf{Backshift Operator} as:
+\begin{equation*}
+    \explain{B(x_t)}{The backshift operator} = x_{t-1}
+\end{equation*}
 \marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=3aadc357-4876-4b61-bb69-4d6ac7347aeb}{Time Series Video 13}}
-
 

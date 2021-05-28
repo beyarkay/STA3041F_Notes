@@ -15,6 +15,9 @@ for script in ./scripts/*; do
     chmod +x $script
     ./$script 
 done
+# For some reason an Rplots.pdf file gets generated. Delete it.
+rm Rplots.pdf
 echo 'Compiling LaTeX...'
-# Run it twice to make sure the images all get referenced correctly.
+
+# Compile the PDF twice to make sure the images all get referenced correctly.
 pdflatex STA3041F_Notes.tex && pdflatex STA3041F_Notes.tex > /dev/null && echo 'All Complete' && rm *.aux *.toc *.log *.out

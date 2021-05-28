@@ -13,20 +13,27 @@
 \usepackage{amsmath} 
 % Nice symbols in math
 \usepackage{amssymb} 
+% Required in order to calculate the width of a certain piece of text
+\usepackage{calc}
 % Make the independence symbol with two perpendiculars next to each other
 \newcommand{\indep}{\perp \!\!\! \perp}
+% Explain math using an underbrace
+\newcommand{\explain}[2]{\underbrace{#1}_{\parbox{\widthof{\ensuremath{#1}}}{\footnotesize\raggedright #2}}}
 
 \begin{document}
 \maketitle
 \tableofcontents
 \chapter{Distributions, tricks, and required knowledge}
+
 \input{ch01_pre_3041F}
 \chapter{Chains, Processes, and Forecasting}
 \input{ch02_chains_and_processes}
 \chapter{Poisson Processes}
 \input{ch03_poisson_processes}
-\chapter{Time series and transformations}
+\chapter{Time Series I and Transformations}
 \input{ch04_time_series_1}
+\chapter{Time Series II}
+\input{ch05_time_series_2}
 \chapter{Terms, Definitions, R trickery, and side-notes}
 \input{ch99_terms_and_notes}
 \end{document}
