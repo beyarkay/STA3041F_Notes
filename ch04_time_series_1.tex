@@ -325,7 +325,15 @@
         s_t = y_t(1 - \alpha) + \alpha \cdot s_{t-1}
     \]
     So the smoothed value at time $t$ depends on the smoothed value at time
-    $t-1$. By assuming we've got an infinite number of historical values, we
+    $t-1$. 
+    We define the forecast for time $t+h$ as being conditional on all the
+    points up to time $t$, and equal to the smoothed value $s_t$ up until that
+    point:
+    \begin{equation*}
+        \hat{y}_{t + 1 | t} = s_t = y_t(1 - \alpha) + \alpha \cdot s_{t-1}
+    \end{equation*}
+
+    By assuming we've got an infinite number of historical values, we
     can get a closed expression for $s_t$.
     \[
     s_t = \sum_{i=0}^\infty w_i \cdot y_{t-i}
