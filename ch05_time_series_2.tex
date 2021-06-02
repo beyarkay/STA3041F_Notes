@@ -8,6 +8,33 @@ We'll be covering:
     \item Linear Time series models (moving average, autoregressive process, autoregressive moving average process)
 \end{itemize}  
 
+\subsection{Backshift Operator}
+We'll (eventually) need the \textbf{Backshift Operator}, so define it as:
+\begin{enumerate}
+    \item \begin{equation*}
+            B^iy_t = y_{t-i}
+        \end{equation*}
+    \item \begin{equation*}
+            Bc = c
+        \end{equation*}
+    \item \begin{equation*}
+            (B^i + B^j)y_t = B^iy_t + B^jy_t = y_{t-i} + y_{t-j}
+        \end{equation*}
+    \item \begin{equation*}
+            B^iB^jy_t = B^jB^iy_t = B^iy_{t-j}= y_{t-j-i}   
+        \end{equation*}
+    \item Also, specially define the following:\begin{equation*}
+            \theta(B) = 1 - \theta_1B - \theta_2B^2 - \dots - \theta_qB^q
+    \end{equation*}
+    \item For $|a| < 1$: \begin{equation*}
+            (1 + aB + a^2B^2 + \dots )y_t = \frac{y_t}{1 - aB}
+        \end{equation*}
+    \item For $|a| > 1$: \begin{equation*}
+            (1 + \frac{1}{aB} + \frac{1}{a^2B^2} + \dots )y_t = \frac{-aBy_t}{1
+            - aB}
+        \end{equation*}
+    
+\end{enumerate}
 \section{Stationarity}
 \subsection{Strict Stationarity}
 Strict stationarity is a property of a time series.
@@ -208,10 +235,173 @@ chi-square distributed, we define the Portmanteau test for offset $m$ as:
 So now we've got a chi-squared distribution, we can look up the value of $Q(m)$
 in the tables.
 
-\subsection{The Backshift Operator}
-We define the \textbf{Backshift Operator} as:
-\begin{equation*}
-    \explain{B(x_t)}{The backshift operator} = x_{t-1}
-\end{equation*}
 \marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=3aadc357-4876-4b61-bb69-4d6ac7347aeb}{Time Series Video 13}}
+\section{Linear Models for Time Series}
+\subsection{White Noise Process}
+This process is defined as only having an error term $e_t$ like:
+ \begin{equation*}
+     y_t = e_t \qquad \text{Where $e_t \iid N(0, \sigma^2)$}
+\end{equation*}
+So we can calculate the moments as:
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{E}[y_t] &= 0 \\
+        \mathbb{V}[y_t] &= \sigma^2 \\
+        \gamma_1 &= \mathbb{C}ov[y_t, y_{t-1}] = \dots = 0 \\
+        \gamma_k &= \dots = 0 \\
+    \end{aligned}
+\end{equation*}
 
+\subsection{The Random Walk Process}
+This is defined as being dependant on the previous time step:
+\begin{equation*}
+    \begin{aligned}
+        y_t &= y_{t-1} + e_t \qquad \text{Where $e_t \iid N(0, \sigma^2)$} \\
+            &\text{And we (usually) assume $y_0$ as:} \\
+        y_0 &= 0 \\
+    \end{aligned}
+\end{equation*}
+Note that the errors are cumulative:
+\begin{equation*}
+    \begin{aligned}
+        y_t &= y_0 + \sum_{i=1}^{t} e_i \\
+            &= \sum_{i=1}^{t} e_i \\
+    \end{aligned}
+\end{equation*}
+Recall that if $X_1 \indep X_2$ then:
+\begin{equation*}
+        \mathbb{E}[X_1 \cdot X_2] = \mathbb{E}[X_1] \cdot \mathbb{E}[X_2]
+\end{equation*}
+
+So the moments are given as:
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{E}[y_t] &= \dots = y_0 = 0  \\
+        \mathbb{V}[y_t] &= \dots = t\sigma^2\\
+        \gamma_1 &= \mathbb{C}ov[y_t, y_{t-1}] = \dots = (t-1) \sigma^2 \\
+                 &= \text{Note in general, if we have $s < t$:} \\
+        \mathbb{C}ov[y_t, y_s] &= s \sigma^2 \\
+        \gamma_k &= \dots = 0 \\
+    \end{aligned}
+\end{equation*}
+
+
+\subsection{The Random Walk Process with Drift}
+This is defined as being dependant on the previous time step, in addition to
+some accumulative term:
+\begin{equation*}
+    \begin{aligned}
+        y_t &= y_{t-1} + \mu + e_t \qquad \text{Where $e_t \iid N(0, \sigma^2)$} \\
+            &\text{And we (usually) assume $y_0$ as:} \\
+        y_0 &= 0 \\
+    \end{aligned}
+\end{equation*}
+
+So the moments are given as:
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{E}[y_t] &= \dots = y_0 + t\mu  \\
+        \mathbb{V}[y_t] &= \dots = t\sigma^2\\
+        \gamma_1 &= \mathbb{C}ov[y_t, y_{t-1}] = \dots = (t-1) \sigma^2 \\
+                 &= \text{Note in general, if we have $s < t$:} \\
+        \mathbb{C}ov[y_t, y_s] &= s \sigma^2 \\
+    \end{aligned}
+\end{equation*}
+Define the \textbf{difference operator} as having symbol $\nabla$ and being
+like:
+\begin{equation*}
+    \nabla y_t := y_t - y_{t-1} = \explain{\mu + e_t}{For a random walk with
+    drift}
+\end{equation*}
+Often the difference operator can help create a stationary process from a non
+stationary one.
+
+\section{First Order Moving Average process}
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=757a8720-2693-47b1-9068-e6352a7edd93}{Time Series Video 14}}
+We'll start talking about first order, then second order, and then we'll
+abstract to talking about the $q$-th order moving average process. For now we
+talk about the first order moving average process and define it as:
+\begin{equation*}
+    Z_t = e_t - \theta e_{t-1} \qquad \text{Where $e_t \iid N(0, \sigma^2)$}
+\end{equation*}
+Where $\theta$ is some weight that we can choose. Note that the sign between
+the two terms is irrelevant, as we can choose $\theta$ to counteract whatever
+sign we choose.
+
+We can then find the moments to be:
+\begin{equation*}
+    \begin{aligned}
+       \mathbb{E}[Z_t] & = 0 \\
+       \gamma_0 &= \mathbb{V}[Z_t] = \sigma^2(1 + \theta^2) \\
+       \gamma_k &= \mathbb{E}[Z_t \cdot Z_{t-k}] \\
+           &= 
+           \begin{cases}
+               \sigma^2(1 + \theta^2) & \text{For $k=0$} \\
+                   -\theta\sigma^2 & \text{For $k=1$} \\
+                   0  & \text{For $k>1$} \\
+           \end{cases} \\
+        \rho_k &= \begin{cases}
+                1 & \text{$k = 0$}\\
+                -\frac{\theta}{1 + \theta^2} & \text{$k = 1$}\\
+                0  & \text{For $k>1$} \\
+            \end{cases}
+    \end{aligned}
+\end{equation*}
+
+\section{Second Order Moving Average Process}
+\begin{equation*}
+    Z_t = e_t - \theta_1 e_{t-1} - \theta_2 e_{t-2} \qquad \text{Where $e_t \iid N(0, \sigma^2)$}
+\end{equation*}
+We can find the moments to be:
+\begin{equation*}
+    \begin{aligned}
+       \mathbb{E}[Z_t] & = 0 \\
+       \gamma_k &= \mathbb{E}[Z_t \cdot Z_{t-k}] \\
+           &= \begin{cases}
+               \theta^2 (1 + \theta_1^2 + \theta_2^2) & \text{For $k=0$} \\
+                   \sigma^2\theta_1(\theta_2 - 1) & \text{For $k=1$} \\
+                   -\theta_2\sigma^2 & \text{For $k=2$} \\
+                   0  & \text{For $k>2$} \\
+           \end{cases} \\
+        \rho_k &= \begin{cases}
+            1  \quad &k= 0 \\
+            \frac{\theta_1(\theta_2 - 1)}{1 + \theta_1^2 + \theta_2^2} & k=1 \\
+            \frac{-\theta_2}{1 + \theta_1^2 + \theta^2_2} & k=2 \\
+            0 & k>2 \\
+            \end{cases}
+    \end{aligned}
+\end{equation*}
+
+\section{Q-th Order Moving Average Process}
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=372248c4-2710-4c42-a7df-ff73b1eabcf1}{Time Series Video 15}}
+\begin{equation*}
+    Z_t = e_t - \sum_{i=1}^{q} \theta_i e_{t-i} \qquad \text{Where $e_t \iid
+    N(0, \sigma^2)$}
+\end{equation*}
+
+We can find the moments to be:
+\begin{equation*}
+    \begin{aligned}
+       \mathbb{E}[Z_t] & = 0 \\
+       \mathbb{V}[Z_t] & = \sigma^2 + \sigma^2 \sum_{i=1}^{q} \theta^2_i \\
+       \gamma_k &= \mathbb{E}[Z_t \cdot Z_{t-k}] \\
+           &= \begin{cases}
+               -\sigma^2\theta_k + \sigma^2 \sum_{i=1}^{q}
+               \theta_{k+i}\theta_i &  \text{For $1 \le k \le q$} \\
+               0 & \text{For $k > q$} \\
+           \end{cases} \\
+        \rho_k &= \begin{cases}
+            \frac{
+                -\theta_k + \sum_{i=1}^{q} \theta_{k+i}\theta_i
+            }{
+                1 + \sum_{i=1}^{q} \theta_i^2
+            } &  \text{For $1 \le k \le q$} \\
+               0 & \text{For $k > q$} \\
+            \end{cases}
+    \end{aligned}
+\end{equation*}
+
+\section{Topics to be covered in the future}
+\subsection{Autoregressive Process}
+\subsection{Autoregressive Moving Average Process}
+\subsection{ARIMA Process}

@@ -15,6 +15,9 @@
 \usepackage{amssymb} 
 % Required in order to calculate the width of a certain piece of text
 \usepackage{calc}
+% Make a \sim with iid on top of it
+\newcommand\iid{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily
+iid}}}{\sim}}}
 % Make the independence symbol with two perpendiculars next to each other
 \newcommand{\indep}{\perp \!\!\! \perp}
 % Explain math using an underbrace
