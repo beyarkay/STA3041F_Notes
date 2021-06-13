@@ -401,7 +401,312 @@ We can find the moments to be:
     \end{aligned}
 \end{equation*}
 
-\section{Topics to be covered in the future}
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=f3d183b3-57bf-45c4-8899-d32d7b58616f}{Time Series Video 16}}
+\section{General Linear Process}
+\textbf{General Linear Process}: A weighted infinite sum of error terms, where
+we call the ith weight $\psi_i$.
+\begin{equation*}
+    \begin{aligned}
+        \sum_{i=1}^{\infty} \psi_i^2 &< \infty \\
+        |\psi_i| &< 1 \\
+        \psi_0 &= 1 \\
+        Z_t &= \sum_{i=0}^{\infty} \psi_i \cdot e_{t-i} \\
+    \end{aligned}
+\end{equation*}
+For example, we can set $\psi_i = (\frac{1}{2})^2$. This obeys the
+requirements.
+
+With a question like \textbf{Identify this process}, you just need to say if
+it's a General Linear Process, a moving average process, etc.
+
+With the example linear process like: $\psi_i = \phi^i$ and with $\phi_i \in
+(0, 1)$ we've got a fully define process given by:
+
+\begin{equation*}
+    \begin{aligned}
+        Z_t &= \sum_{i=0}^{\infty} \phi^i e_{t-i} \\
+        \gamma_0 &= \mathbb{E}[Z_t^2]\\
+                 &= \sigma^2 \sum_{i=0}^{\infty} \phi^{2i}\\
+                 &= \frac{\sigma^2}{1 - \phi^2}
+        \gamma_k &= \frac{\phi^k \sigma^2}{1 - \phi^2} \qquad \forall k=0,1,.. \\
+        \rho_k &= \phi^k \qquad \forall k=0,1,.. \\
+    \end{aligned}
+\end{equation*}
+
+An example of calculating the autocovariance $\gamma_k$ :
+\begin{equation*}
+    \begin{aligned}
+        \gamma_k &= \mathbb{C}ov[Z_t, Z_{t+k}] = \mathbb{E}[Z_t \cdot Z_{t_k}] \\
+                 &= \mathbb{E}[\left( \sum_{i=0}^{\infty} \phi^i e_{t-i}\right)
+                 \left(\sum_{j=0}^{\infty} \phi^j e_{t+k-j} \right)] \\
+                 &\text{let } t - i = t + k - j \iff j = i+k\\
+        \gamma_k = \mathbb{E}[\left( \sum_{i=0}^{\infty} \phi^i e_{t-i}\right)
+                \left(\sum_{i=0}^{\infty} \phi^{i+k} e_{t-i} \right)] \\
+            &= \phi^k \mathbb{E}[\left( \sum_{i=0}^{\infty} \phi^i
+                 e_{t-i}\right)^2] \\
+            &= \frac{\phi^k \sigma^2}{1 - \phi^2} \\
+    \end{aligned}
+\end{equation*}
+Note that general linear processes are weakly stationary of order 2 since
+neither the mean nor the covariance depends on time $t$.
+
+
+\section{Infinite Moving Average Process}
+Very similar to the above General Linear Process:
+\begin{equation*}
+    Z_t = \sum_{i=0}^{\infty} \omega_i e_{t-i} \qquad \omega_0 = 1
+\end{equation*}
+
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{E}[Z_t] &= 0 \\
+        \gamma_0 &= \lim_{T\to\infty} \sigma^2 \sum_{i=0}^{T} \omega_i^2 \\
+        \gamma_k &= \lim_{T\to\infty} \sigma^2 \sum_{i=0}^{T} \omega_i
+        \omega_{k+i} \\
+        \rho_k &= \lim_{T\to\infty} \frac{\sum_{i=0}^{T} \omega_i
+        \omega_{k+i}}{sum_{i=0}^{T} \omega_i^2} \\
+    \end{aligned}
+\end{equation*}
+
+
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=ea9eba37-1039-4ca0-a4ab-7178816a8345}{Time Series Video 17}}
+Have previously looked at the moving average process.
+Will now be looking at forecasts for moving average processes
+\subsection{Forecasts for Moving Average Processes}
+With the moving average process defined by:
+\begin{equation*}
+    Z_t = e_t - \phi e_{t-1} \qquad \text{Where $e_t \iid N(0, \sigma^2)$}
+\end{equation*}
+And now lets define the forecast value as $\hat{Z}_{t+1}$ and we set it equal
+to be:
+ \begin{equation*}
+     \begin{aligned}
+         \hat{Z}_{t+1} &= \mathbb{E}[Z_{t+1} | \explain{Z_t, Z_{t-1} \dots
+         Z_1}{Often called just $I_t$, the information at  $t$}]  \\
+                       &= \mathbb{E}[e_{t+1} - \phi e_t | I_t]  \\
+                       &= \explain{\mathbb{E}[e_{t+1} | I_t]}{$e_{t-1}$ is
+                       still a random variable} - \phi \explain{\mathbb{E}[e_t
+                   | I_t]}{$e_t$ has a measured value}  \\
+                       &= 0 - \phi e_t
+                       &= -\phi e_t
+     \end{aligned}
+\end{equation*}
+So the forecast for a moving average process is $ \hat{Z}_{t+1} = -\phi e_t$.
+
+We often also want to know \textbf{the margin of error}, so we define the one
+step ahead forecast error $ \hat{e}(1)$ as:
+\begin{equation*}
+    \begin{aligned}
+        \hat{e}(1) &= Z_{t+1} - \hat{Z}_{t+1} \\
+                   &= (e_{t+1} - \phi e_t) - (- \phi e_t) \\
+                   &= e+{t+1}
+                   &\text{Note that we can also calculate:}\\
+        \mathbb{V}[ \hat{e}(1)] &= \sigma^2 \\
+    \end{aligned}
+\end{equation*}
+
+Now, for a \textbf{MA(q) model} , we have:
+\begin{equation*}
+    \begin{aligned}
+        \hat{Z}_{t+l} &= - \sum_{i=l}^{q} \phi_i e_{t-i+l} \qquad \forall 1 
+        \le l \le q \\
+        \hat{e}(l) &= Z_{t+l} - \hat{Z}_{t+l} \\
+            \mathbb{V}[ \hat{e}(l)] &= \begin{cases}
+            \sigma^2 & \text{for $l=1$}\\
+            \sigma^2 \left( 1 + \sum_{i=1}^{l-1} \phi_i^2 \right)& \text{for $
+            2 \le l \le q$}\\
+            \sigma^2 \left( 1 + \sum_{i=1}^{q} \phi_i^2 \right)& \text{for $l >
+            q$}\\
+        \end{cases}
+    \end{aligned}
+\end{equation*}
+
+
 \subsection{Autoregressive Process}
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?id=35d8e9d3-94b8-4149-90d1-e85a0c8c11da&ltimode=true}{Time Series Video 18}}
+A first order autoregressive process (AR(1))can be defined as a weighted linear
+sum of the previous value in the time series $Z_{t-1}$ and an error term
+$e_{t}$:
+\begin{equation*}
+    Z_t = \phi Z_{t - 1} + e_{t} \qquad \text{Where $e_t \iid N(0, \sigma^2)$}
+\end{equation*}
+Since $Z_{t}$ depends on $Z_{t-1}$, this can be expanded into an infinite
+moving average process (assuming $|\phi| < 1$:
+\begin{equation*}
+    Z_{t} = \sum_{i=0}^{\infty} \phi^{i} e_{t-1}
+\end{equation*}
+So some properties are given by:
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{E}[Z_{t}] &= 0 \\
+        \mathbb{V}[Z_{t}] &= \frac{\sigma^{2}}{1 - \phi^{2}}\\
+        \gamma_{k} &= \frac{\phi^{k}\sigma^{2}}{1-\phi^{2}} = \phi^{k}
+        \gamma_0  \\
+        \rho_{k} &= \phi^{k} \\
+    \end{aligned}
+\end{equation*}
+
+We can also write the AR(1) process as:
+\begin{equation*}
+    \begin{aligned}
+        e_{t} &= Z_{t} - \phi Z_{t-1} = (1 - \phi B) Z_{t}\\ 
+        &= \phi(B)Z_{t} \\ 
+    \end{aligned}
+\end{equation*}
+
+
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?id=3a8d235f-b875-4370-92aa-25d86f869e8d&ltimode=true}{Time Series Video 19}}
+Now we'll write the AR(2) process as:
+\begin{equation*}
+    \begin{aligned}
+        Z_{t} &= \phi_{1}Z_{t-1} + \phi_{2}Z_{t-2} + e_t \qquad \text{Where $e_t
+        \iid N(0, \sigma^2)$} \\
+              &\text{Or alternatively:}\\
+            (1 - \phi_{1}B - \phi_{2}B^{2})Z_{t} &= e_{t} \\
+    \end{aligned}
+\end{equation*}
+And if we assume the time series is weakly stationary of order 2, and that
+$\sum_{i=1}^{2} \phi_{i} \ne 1$: 
+(\textbf{WS(2)}) then:
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{E}[Z_{t}] &= 0 \\
+        \gamma_{0} &= \left( \frac{1 - \phi_{2}}{1 + \phi_{2}} \right) \frac{\sigma^{2}}{1 - \phi^{2}_{2} - \phi_{1}^{2}} \\
+        \gamma_{k} &= \phi_{1}\gamma_{k-1} + \phi_{2}\gamma_{k-2} \\
+        \rho_{k} &= \phi_{1}\rho_{k-1} + \phi_{2}\rho_{k-2} \\
+                          &\text{Where $\rho_{-1} = \rho_{1}$ and $\rho_{0}=1$.}\\
+   \end{aligned}
+\end{equation*}
+The above equations for $\gamma_{k}$ and $\rho_{k}$ are called the
+\textbf{Yule-Walker} equations.
+
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?id=61de3aff-2f8f-4535-973e-f7539d887186&ltimode=true}{Time Series Video 20}}
+\subsection{The Characteristic Equation}
+Taking the formula for a AR(2) process, we can write it as:
+\begin{equation*}
+    \begin{aligned}
+        Z_{t} &= \phi_{1}Z_{t-1} + \phi_{2}Z_{t-2} + e_t \\
+        e_{t} &= Z_{t}\left( \explain{1 - \phi_{1}B - \phi_{2}B^{2}}{Equate
+        this to zero} \right) \\
+                1 - \phi_{1}B - \phi_{2}B^{2} &= 0 \\
+                \text{Let $x = \frac{1}{B}$} &\\
+                x^{2} - \phi_{1}x - \phi_{2} &= 0 \\
+                x &= \frac{\phi_{1} \pm \sqrt{\phi^{2}_{1} + 4\phi_{2}}}{2}
+    \end{aligned}
+\end{equation*}
+
+In general, an \textbf{AA(q) process is weakly stationary of order 2 iff} the
+characteristic roots lie inside the unit circle in the complex plane, ie:
+\begin{equation*}
+    \begin{aligned}
+        \phi_{1} + \phi_{2} &< 1 \\
+        \phi_{2} - \phi_{1} &< 1 \\
+        |\phi_{2}| &< 1 \\
+    \end{aligned}
+\end{equation*}
+
+\subsection{P-th order Autoregressive Process}
+The p-th order autoregressive process AR(p) can be written as a linear
+combination of the previous p time points, plus some random error.
+\begin{equation*}
+    \begin{aligned}
+        Z_{t} = e_{t} + \sum_{i=1}^{p} \phi_{i}Z_{t-i} \qquad \text{Where $e_t
+        \iid N(0, \sigma^2)$}
+    \end{aligned}
+\end{equation*}
+
+Then the lag-k autocovariance $\gamma_{k}$ can be found by:
+\begin{equation*}
+    \begin{aligned}
+        \gamma_{k} &= \mathbb{E}[Z_{t} \cdot Z_{t-k}] \\
+        Z_{t} \cdot Z_{t-k} &= Z_{t-k} \cdot e_{t} + Z_{t-k}\cdot\sum_{i=1}^{p}
+        \phi_{i}Z_{t-i} \\
+        \gamma_{k} &= \mathbb{E}[Z_{t-k} \cdot e_{t}] + Z_{t-k}\cdot\sum_{i=1}^{p}
+        \phi_{i}Z_{t-i}] \\
+        \gamma_{k} &= \mathbb{E}[Z_{t-k} \cdot e_{t}]
+        +\mathbb{E}\left[Z_{t-k}\cdot\sum_{i=1}^{p} \phi_{i}Z_{t-i}\right] \\
+    \end{aligned}
+\end{equation*}
+And now we can label the following equations as the Yule-Walker Equations:
+\begin{equation*}
+    \begin{aligned}
+    \gamma_{k} &= 0 + \sum_{i=1}^{p} \phi_{i}\gamma_{k-i} \\
+    \rho_{k} &= \sum_{i=1}^{p} \phi_{i}\phi_{k-i} \\
+    \end{aligned}
+\end{equation*}
+
+\subsection{Finding the Order of an Autocorrelation Model}
+The aim is to use data we've measured to find the best value for $p$, and to
+evaluate how good this best value is.
+We also define 
+\begin{itemize}
+    \item \textbf{ACF}: Autocorrelation Function and 
+    \item \textbf{PACF}: Partial Autocorrelation Function
+\end{itemize}
+
+And then the lag-i partial autocorrelation is defined as $\phi_{ii}$ with the
+double subscript to differentiate from the coefficients of the autoregressive
+process, $\phi_{i}$.
+
+The partial autocorrelation between $Z_{t}$ and $Z_{t-k}$ is the correlation
+between $Z_{t}$ and $Z_{t-k}$ but with all the in between correlations from
+$Z_{t-1}, \dots Z_{t-k-1}$ removed. This is done by subtracting a linear
+combination of all the in between time series points, with the coefficients are
+assigned as $\alpha_{1}, \dots , \alpha_{k-1}$. To make this explicit:
+\begin{equation*}
+    \phi_{ii} = \mathbb{C}orr\left[Z_{t} - \sum_{i=1}^{k-1} \alpha_{i}
+    Z_{t-i},\quad Z_{t-k} -
+\sum_{i=1}^{k-1} \alpha_{i} Z_{t-i} \right]
+\end{equation*}
+
+\subsubsection{Mean Square Error estimation of $\phi_{ii}$}
+To solve for $\phi_{ii}$, note how we can use FOIL when calculating
+covariance:
+\begin{equation*}
+    \mathbb{C}ov\left[A - B, C - D\right] = \mathbb{C}ov\left[A, C\right] -
+    \mathbb{C}ov\left[A, D\right] - \mathbb{C}ov\left[B, C\right] +
+    \mathbb{C}ov\left[B, D\right] 
+\end{equation*}
+But before we can use the above formula, we need estimates for $\alpha_{i}$.
+
+We can define the MSE as the minimum value with respect to $ \alpha$ of:
+\begin{equation*}
+    \begin{aligned}
+        \text{MSE} &= \mathbb{E}\left[(Z_{t} - \alpha Z_{t-1})^{2}\right] \\
+        &= \mathbb{E}\left[Z_{t}^{2} - 2\alpha Z_{t}Z_{t-1} +
+        \alpha^{2}Z_{t-1}^{2}\right]  \\
+        &= \gamma_{0} - 2\alpha\gamma_{1} + \alpha^{2}\gamma_{0} \\
+        &\text{Taking the derivative with respect to $\alpha$:}\\
+        \frac{d\text{MSE}}{d\alpha} &= 0 \\
+        -2\gamma_{1} + 2\alpha\gamma_{0} &= 0 \\
+        \alpha &= \frac{2\gamma_{1}}{2\gamma_{0}} \\
+               &= \rho_{1} \\
+    \end{aligned}
+\end{equation*}
+So we now can calculate $\phi_{22}$ as:
+\begin{equation*}
+    \begin{aligned}
+        \phi_{22} &= \mathbb{C}orr\left[Z_{t} - \alpha Z_{t-1},\quad Z_{t-2} -
+        \alpha Z_{t-1} \right] \\
+                  &= \frac{\gamma_{2} - \rho_{1} \gamma_{1} -
+                  \rho_{1}\gamma_{1} + \rho_{2}^{2}\gamma_{0}}{
+              \mathbb{V}\left[Z_{t} - \rho_{1} Z_{t-1}\right] } \\
+                  &= \frac{\gamma_{2} - 2\rho_{1}\gamma_{1} +
+                  \rho_{1}^{2}\gamma_{0}}{\gamma_{0} - 2\rho_{1}\gamma_{1} +
+              \rho_{1}^{2}\gamma_{0}} \\
+                  &\text{Note $\rho_{1} = \phi$, and $\rho_{2} = \phi \rho_{1}$}
+                  &= \frac{\rho_{1} - 2 \rho_{1}^{2} + \rho_{1}^{2}}{1 - 2
+                  \rho_{1}^{2} + \rho_{1}^{2}} \\
+                  &= \frac{\phi^{2} - 2 \phi^{2} + \phi^{2}}{1 - 2\phi^{2} +
+                  \phi^{2}} \\
+                  &= 0 \\
+    \end{aligned}
+\end{equation*}
+So the lag-2 partial autocorrelation is equal to zero. This is because the
+autoregressive process is of order 1, \textbf{AR(1)} so any lag-n partial
+autocorrelation with n greater than 1 will be zero.
+
+\section{Topics to be covered in the future}
+
 \subsection{Autoregressive Moving Average Process}
 \subsection{ARIMA Process}
