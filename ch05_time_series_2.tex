@@ -522,7 +522,7 @@ Now, for a \textbf{MA(q) model} , we have:
 \end{equation*}
 
 
-\subsection{Autoregressive Process}
+\section{Autoregressive Process}
 \marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?id=35d8e9d3-94b8-4149-90d1-e85a0c8c11da&ltimode=true}{Time Series Video 18}}
 A first order autoregressive process (AR(1))can be defined as a weighted linear
 sum of the previous value in the time series $Z_{t-1}$ and an error term
@@ -595,7 +595,7 @@ Taking the formula for a AR(2) process, we can write it as:
     \end{aligned}
 \end{equation*}
 
-In general, an \textbf{AA(q) process is weakly stationary of order 2 iff} the
+In general, an \textbf{AR(q) process is weakly stationary of order 2 iff} the
 characteristic roots lie inside the unit circle in the complex plane, ie:
 \begin{equation*}
     \begin{aligned}
@@ -705,8 +705,495 @@ So we now can calculate $\phi_{22}$ as:
 So the lag-2 partial autocorrelation is equal to zero. This is because the
 autoregressive process is of order 1, \textbf{AR(1)} so any lag-n partial
 autocorrelation with n greater than 1 will be zero.
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=cc9af55f-c9a6-4603-ba43-798ad514e018}{Time Series Video 21}}
+31 minutes
+Today:
+\begin{enumerate}
+    \item calculating $\phi_{33}$
+    \item Forecasting for an AR Process
+    \item How to identify an AR Process via EDA with measured data.
+\end{enumerate}
+Recall that the number of statistically significant partial autocorrelations is
+equal to the order of the AR process. Then the parameters of the AR process can
+be estimated via least squares.
 
-\section{Topics to be covered in the future}
+\subsection{Calculating lag-3 partial autocorrelations of a AR(1) process}
 
-\subsection{Autoregressive Moving Average Process}
-\subsection{ARIMA Process}
+With a model like:
+\begin{equation*}
+    Z_{t} = \phi Z_{t-1} + e_{t} \qquad \text{Where $e_t \iid N(0, \sigma^2)$}
+\end{equation*}
+\textbf{Theorem:} Any partial autocorrelation of order greater than the order
+of the AR process will be zero
+
+So $\phi_{11}$ is the only non zero of $\phi_{11}, \phi_{22}, \dots $
+
+Where $\alpha_{i}$ and $\beta_{i}$ are unknown constants of the model that we
+will estimate via the values that minimise the mean squared error.
+\begin{equation*}
+    \begin{aligned}
+        \phi_{33} &= \mathbb{C}orr\left[Z_{t} - \alpha_{1}Z_{t-1} -
+        \alpha_{2}Z_{t-2}, Z_{t-3} - \beta_{1}Z_{t-1} - \beta_{2}Z_{t-2}\right] \\
+    \end{aligned}
+\end{equation*}
+
+We define the MSE as the minimum value with respect to $ \alpha$ of:
+\begin{equation*}
+    \begin{aligned}
+        \text{MSE} &= \min_{\alpha}\left[\mathbb{E}\left[(Z_{t} - \alpha_{1}
+        Z_{t-1} - \alpha_{2} Z_{t-2})^{2}\right] \right] \\
+                   &= \text{Expand the trinomial...} \\
+                   &= \min_{\alpha} \left[ \gamma_{0} +
+                   \alpha_{1}^{2}\gamma_{0} + \alpha_{2}^{2}\gamma_{0} -
+               2\alpha_{1}\gamma_{1} - 2\alpha_{2}\gamma_{2} +
+           2\alpha_{1}\alpha_{2}\gamma_{1} \right] \\
+                   & \text{Setting the derivative to zero} \\
+                \frac{d \text{MSE}}{d \alpha_{1}} &= 0 \\
+                    &= 2 \alpha_{1}\gamma_{0} - 2 \gamma_{1} + 2\alpha_{2}\gamma_{1} \\
+                    &= 2\alpha_{1}\gamma_{0} + \gamma_{1}\left( -2 + 2\alpha_{2} \right) \\
+                \frac{d \text{MSE}}{d \alpha_{2}} &= 0 \\
+                    &= 2\alpha_{2}\gamma_{0} - 2\gamma_{2} + 2 \alpha_{1}\gamma_{1} \\
+                    & \text{Use the two equations to simultaneously find values for $\alpha_{1}$ and $\alpha_{2}$} \\
+                    & \text{Then we can find $\phi_{33} as:$} \\
+                    \phi_{33} &= \mathbb{C}orr\left[Z_{t} - \alpha_{1}Z_{t-1} -
+                    \alpha_{2}Z_{t-2}, Z_{t-3} - \beta_{1}Z_{t-1} -
+                \beta_{2}Z_{t-2}\right] \\
+    \end{aligned}
+\end{equation*}
+Now note that we can calculate correlation using FOIL like:
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{C}orr\left[a_{1}X + b_{1}Y, a_{2}Z + b_{2}T\right] &= \frac{
+\mathbb{C}ov\left[a_{1}X + b_{1}Y, a_{2}Z + b_{2}T\right] 
+        }{
+\mathbb{V}\left[a_{1}X + b_{1}Y\right] 
+    } \\
+    &= \frac{a_{1}a_{2} \mathbb{C}ov\left[X, Z\right] + a_{1}b_{2}
+    \mathbb{C}ov\left[X, T\right] +b_{1}a_{2} \mathbb{C}ov\left[Y, Z\right] +
+b_{1}b_{2} \mathbb{C}ov\left[Y, T\right] }{\gamma_{0}} \\
+    \end{aligned}
+\end{equation*}
+for the second line, we assume that the two variables $a_{1}X + b_{1}Y$
+and $a_{2}Z + b_{2}T$ have equal variance (ie the process is \textbf{WS(2)}).
+
+\subsection{Using Real Data to make a model and then forecast}
+If you have measured data points $z_{1}, \dots z_{n}$. Via some glossed over
+EDA, God tells us that this data comes from an autoregressive process of order
+3. So we can write a model for the data like:
+\begin{equation*}
+    Z_{t} = c + \phi_{1}Z_{t-1} + \phi_{2}Z_{t-2} + \phi_{3}Z_{t-3} + e_{t}
+\end{equation*}
+Now to find values for the parameters, we'll do regression analysis and the
+Ordinary Least Squares analysis. 
+
+Note that because the model dictates the data points are not completely
+independent of each other, we require the error term to be a white noise
+process for the OLS analysis to hold mathematically. We also won't be able to
+use the first and last few data points as the model requires the $(t-3)$th data
+point to estimate the $t$-th data point.
+
+
+\subsection{Checking the validity of a AR model}
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=150758dd-b263-45f7-a607-a4833c17b89e}{Time Series Video 22}}
+We'll be looking at the residuals and checking our assumption that they come
+from a white noise process. We'll calculate the autocorrelations of these white
+noise processes and assert that there are no statistically significant
+autocorrelations.
+
+\subsection{Forecasting with an AR process}
+With the model given by:
+\begin{equation*}
+    Z_{t} = \phi Z_{t-1} + e_{t} \qquad \text{Where $e_t \iid N(0, \sigma^2)$}
+\end{equation*}
+
+The \textbf{K-step ahead forecast} is defined as:
+\begin{equation*}
+    \hat{Z}_{t+k} = \mathbb{E}\left[Z_{t+k} | I_{t}\right] 
+\end{equation*}
+\subsubsection{1-step ahead forecast}
+For example, the 1-step ahead forecast is given by:
+\begin{equation*}
+    \begin{aligned}
+        \hat{Z}_{t+1} &= \mathbb{E}\left[Z_{t+1} | Z_{t}, Z_{t-1}, \dots
+        Z_{1}\right]  \\
+                      &\text{So now we'll calculate $Z_{t+1}$ }\\
+            Z_{t+1} &= \phi Z_{t} + e_{t+1} \\
+        \hat{Z}_{t+1} &= \mathbb{E} \left[  \phi Z_{t} + e_{t+1} | I_{t}\right] \\
+                      &= \phi Z_{t} +
+                      \explain{\mathbb{E}\left[e_{t+1}\right]}{equal to zero}  \\
+                      &= \phi Z_{t} \\
+    \end{aligned}
+\end{equation*}
+So now that we've got  $ \hat{Z}_{t+1}$, lets find the variance of it. We'll
+define the \textbf{one-step ahead forecast error} $ \hat{e}(1)$ as:
+\begin{equation*}
+    \begin{aligned}
+        \hat{e}(1) &= Z_{t+1} - \hat{Z}_{t+1} \\
+                   &= \phi Z_{t} + e_{t+1} - \phi Z_{t} \\
+                   &= e_{t+1} \\
+    \end{aligned}
+\end{equation*}
+And we can calculate the variance of the one-step ahead forecast error as:
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{V}\left[ \hat{e}(1)\right] &= \mathbb{V}\left[ e_{t+1} \right]
+        \\
+                                           &= \sigma^{2} \\
+    \end{aligned}
+\end{equation*}
+
+\subsubsection{2-step ahead forecast}
+\begin{equation*}
+    \begin{aligned}
+        \hat{Z}_{t+2} &= \mathbb{E}\left[Z_{t+1} | I_{r}\right]  \\
+                      &= \mathbb{E}\left[\phi Z_{t+1} + e_{t+2} | I_{t}\right]  \\
+                      &= \phi \explain{\mathbb{E}\left[Z_{t+1} |
+                      I_{t}\right]}{1-step ahead forecast} +
+                      \explain{\mathbb{E}\left[e_{t+1} | I_{t}\right] }{ R.V.
+                      is zero} \\
+                      &= \phi Z_{t+1} + 0 \\
+    \end{aligned}
+\end{equation*}
+So the two step ahead forecast is just the one-step ahead forecast times
+$\phi$.
+The error of the forecast, and the variance thereof is given by:
+\begin{equation*}
+    \begin{aligned}
+        \hat{e}(2) &= Z_{t+2} - \hat{Z}_{t+2}\\
+                   &= \phi Z_{t+1} + e_{t+2} - \phi \hat{Z}_{t+1} \\
+                   &= \phi \left( Z_{t+1} - \hat{Z}_{t+1} \right) + e_{t+2} \\
+                   &= \phi \hat{e}(1) + e_{t+2} \\
+        \mathbb{V}\left[\hat{e}(2)\right]  &= \mathbb{V}\left[\phi \hat{e}(1) + e_{t+2}\right]  \\
+                                           &= \phi^{2} \sigma^{2} + \sigma^{2}\\
+                                           &= \sigma^{2}(1 + \phi^{2}) \\
+    \end{aligned}
+\end{equation*}
+So the variance of the 1-step forecast error was $\sigma^{2}$ and then for the
+2-step forecast error, the variance grew to $\sigma^{2}(1 + \phi^{2})$ (where
+$0 < \phi^{2} \le \phi < 1$
+       
+\subsection{Sections in the notes that will not be covered}
+\begin{itemize}
+    \item The unit root process.
+\end{itemize}
+
+\subsection{AR(2) Process forecasting}
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=71504881-c12b-4405-94ab-148592068f9e}{Time Series Video 23}}
+We'll be doing 1, 2, and 3 step forecasting for a AR(2) process given by:
+\begin{equation*}
+    Z_{t} = \phi_{1} Z_{t-1} + \phi_{2} Z_{t-2} + e_{t} \qquad \text{Where $e_t \iid N(0, \sigma^2)$}
+\end{equation*}
+So we'll calculate the 1 step forecast by:
+\begin{equation*}
+    \begin{aligned}
+        \hat{Z}_{t+1} &= \mathbb{E}\left[Z_{t+1} | I_{t}\right] \\
+                      &= \mathbb{E}\left[ \phi_{1} Z_{t-1} + \phi_{2} Z_{t-2} +
+                      e_{t} | I_{t} \right]  \\
+                      &= \phi_{1}Z_{t} + \phi_{2}Z_{t-1} + 0 \\
+        \hat{e}(1) &= Z_{t+1} - \hat{Z}_{t+1} = e_{t+1} \\
+        \mathbb{V}\left[\hat{e}(1)\right]  &= \sigma^{2}\\
+    \end{aligned}
+\end{equation*}
+And the 2-step ahead forecast as:
+\begin{equation*}
+    \begin{aligned}
+        \hat{Z}_{t+2} &= \mathbb{E}\left[Z_{t+2} | I_{t}\right] \\
+                      &= \mathbb{E}\left[ \phi_{1} Z_{t+1} + \phi_{2} Z_{t} +
+                      e_{t+2} | I_{t} \right]  \\
+                      &= \phi_{1} \hat{Z}_{t+1} + \phi_{2} Z_{t} + 0 \\
+        \hat{e}(2) &= Z_{t+2} - \hat{Z}_{t+2} \\
+                   &= \phi_{1} \hat{e}(1) + e_{t+2} \\
+        \mathbb{V}\left[\hat{e}(2)\right]  &= \sigma^{2} \left( 1 + \phi_{1} \right)\\
+    \end{aligned}
+\end{equation*}
+And the 3-step ahead forecast as:
+\begin{equation*}
+    \begin{aligned}
+        Z_{t+3} &= \phi_{1} Z_{t+2} + \phi_{2} Z_{t+1} + e_{t+3}
+        \hat{Z}_{t+3} &= \mathbb{E}\left[Z_{t+3} | I_{t}\right] \\
+                      &= \phi_{1} \hat{Z}_{t+2} + \phi_{2} \hat{Z}_{t+1} + 0 \\
+        \hat{e}(3) &= Z_{t+3} - \hat{Z}_{t+3} \\
+                   &= \phi_{1} \hat{e}(2) + \phi_{2} \hat{e}(1) + e_{t+3} \\
+        \mathbb{V}\left[\hat{e}(3)\right]  &= \phi_{1}^{2} \sigma^{2}(1 +
+        \phi_{1}^{2}) + \phi_{2}^{2}\sigma^{2} + \sigma^{2}\\
+                                           &= \sigma^{2} \left( 1 +
+                                           \phi_{1}^{2} + \phi_{1}^{4} +
+                                       \phi_{2}^{2} \right) \\
+    \end{aligned}
+\end{equation*}
+So (intuitively) as we try to forecast further into the future, the variance
+increases.
+
+\subsection{Forecasting with a AR(p) process}
+The model looks like:
+\begin{equation*}
+    \begin{aligned}
+        Z_{t} &= \phi_{1} Z_{t-1} + \phi_{2}Z_{t-2} + \dots + \phi_{p} Z_{t-p} +
+        e_{t} \qquad \text{Where $e_t \iid N(0, \sigma^2)$}\\
+              &= e_{t} + \sum_{i=1}^{p} \phi_{i}Z_{t-i} \\
+    \end{aligned}
+\end{equation*}
+
+And the forecast value will look like:
+\begin{equation*}
+    \begin{aligned}
+        \hat{Z}_{t+1} &= \mathbb{E}\left[Z_{t+1} | I_{t}\right]  \\
+                      &= \mathbb{E}\left[ e_{t+1} + \sum_{i=1}^{p} \phi_{i}Z_{t-i+1} | I_{t} \right]  \\
+                      &= \sum_{i=1}^{p} \phi_{i}Z_{t-i+1} \\
+    \end{aligned}
+\end{equation*}
+This equation is given without much explanation really.
+\begin{equation*}
+    \begin{aligned}
+        Z_{t+l} = e_{t+l} + \sum_{i=1}^{p} \phi_{i} Z_{t + l - i}
+        \hat{Z}_{t+l} = \sum_{i=1}^{p} \phi_{i} Z_{t + l - i}
+    \end{aligned}
+\end{equation*}
+
+\subsection{Stationarity and Invertibility}
+Consider the AR process:
+\begin{equation*}
+    Z_{t} = \phi Z_{t-1} + e_{t} \qquad \text{Where $e_t \iid N(0, \sigma^2)$}
+\end{equation*}
+
+If $|\phi| < 1$ then we can rewrite the model with the backshift operator like:
+\begin{equation*}
+    \begin{aligned}
+        Z_{t} &= \phi B Z_{t} + e_{t} \\
+        \explain{(1 - \phi B)Z_{t}}{The characteristic polynomial} \\
+    \end{aligned}
+\end{equation*}
+And so we can get the \textbf{Characteristic equation} by substituting $B =
+\frac{1}{x}$ :
+\begin{equation*}
+    \begin{aligned}
+        0 &= 1 - \phi B \\
+        1 - \frac{\phi}{x} &= 0 \\
+        x - \phi &= 0 \\
+    \end{aligned}
+\end{equation*}
+So our root is $x = \phi $. If this root lies inside the unit circle in the
+complex plane, then the time series model is stationary.
+
+\textbf{Invertible}: we can take the process and rewrite it as an infinite
+moving average process.
+
+In this case, our AR process is invertible. Let's write it as an infinite
+moving average process:
+\begin{equation*}
+    \begin{aligned}
+        (1 - \phi B) Z_{t} &= e_{t} \\
+        Z_{t} &= \explain{\frac{e_{t}}{1 - \phi B}}{Note $|\phi| < 1$} \\
+        Z_{t} &= \sum_{i=0}^{\infty} \left( \phi B \right)^{i} e_{t} \\
+        Z_{t} &= \sum_{i=0}^{\infty} \phi^{i} B^{i} e_{t} \\
+        Z_{t} &= \sum_{i=0}^{\infty} \phi^{i} e_{t-i} \\
+    \end{aligned}
+\end{equation*}
+
+So to check invertibility:
+\begin{enumerate}
+    \item Get the characteristic roots
+    \item Check they lie inside the unit circle 
+    \item  Therefore they are stationary
+    \item Then check if you can write the process as an infinite moving average
+        process.
+\end{enumerate}
+
+\section{The Autoregressive Moving Average Process}
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=d6af6a2d-e789-4b3d-8c7a-c1a4c91200f8}{Time Series Video 24}}
+
+\subsection{Intro to ARMA(p,q)}
+
+The ARMA process has both Autoregressive components and moving average
+components. And ARMA(p,q) process is shown below, where $p$ is the order of the
+order of the autoregressive component. $q$ is the order of the moving average
+component:
+\begin{equation*}
+    \begin{aligned}
+        Z_{t} &= \phi Z_{t-p} + e_{t} - \theta e_{t-q} \qquad \text{Where $e_t \iid N(0, \sigma^2)$} \\
+    \end{aligned}
+\end{equation*}
+Assuming the model is weakly stationary of order 2, we find the various
+properties by:
+\begin{equation*}
+    \begin{aligned}
+        Z_{t} Z_{t-1} &= \phi Z_{t-1}^{2} + e_{t}Z_{t-1} - \theta
+        e_{t-1}Z_{t-1}\\
+        \mathbb{E}\left[Z_{t} Z_{t-1}\right] &= \gamma_{1} = \phi \gamma_{0} +
+        0 - \theta \sigma^{2}\\
+            &= \phi\gamma_{0} - \theta \sigma^{2} \\
+        \gamma_{2} &= \text{calculated in a similar way to $\gamma_{1}$} \\
+        \mathbb{V}\left[Z_{t}\right] &= \mathbb{E}\left[Z_{t}^{2}\right] \\
+            &= \mathbb{E}\left[\phi^{2}Z_{t-1}^{2} + e_{t}^{2} +
+            \theta^{2}e_{t-1}^{2} + 2\phi Z_{t-1} e_{t} - 2 \theta \phi
+        e_{t-1}Z_{t-1} - 2 \theta e_{t} e_{t-1}\right]  \\
+            &= \phi^{2} \explain{\mathbb{E}\left[Z_{t}^{2}\right]}{due to
+        WS(2)} + \sigma^{2} + \theta^{2}\sigma^{2} - 2 \theta \phi \sigma^{2} \\
+            \mathbb{V}\left[Z_{t}\right] - \phi^{2}
+        \mathbb{V}\left[Z_{t}\right] &=  \sigma^{2} + \theta^{2}\sigma^{2} -
+        2\theta \phi \sigma^{2} \\
+        \mathbb{V}\left[Z_{t}\right] = \frac{\sigma^{2}(1 + \theta^{2} -
+        2\theta \phi)}{1 - \phi^{2}}\\
+    \end{aligned}
+\end{equation*}
+Exact expressions for variance, autocovariance, and autocorrelation are left as
+an exercise for the reader.
+
+\subsection{Identifying the order of an ARMA process}
+It's not super simple to identify the order(s) of an ARMA process. In general
+we tentatively find the parameters of the ARMA process, often splitting it up
+into the AR and MA processes and then solving them separately. Finally we'd
+join them together and iteratively evaluate our proposed model against a
+(possibly better) alternative model.
+
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=68df0118-3dea-4a29-a9d9-d98f45f554b7}{Time Series Video 25}}
+When identifying the order(s) of an ARMA process, we often want to try fit the
+data to an AR process and MA process separately, and then use those values as a
+starting point for fitting the ARMA process.
+
+\subsection{Forecasting with an ARMA Process}
+With the first order ARMA process like:
+\begin{equation*}
+    Z_{t} = \phi Z_{t-1} + e_{t} - \theta e_{t-1} \qquad \text{Where $e_t \iid N(0, \sigma^2)$}
+\end{equation*}
+So the 1-step forecast can be found like:
+\begin{equation*}
+    \begin{aligned}
+        \hat{Z}_{t+1} &= \mathbb{E}\left[Z_{t+1} | I_{t}\right]  \\
+                      &= \mathbb{E}\left[\phi Z_{t} + e_{t+1} - \theta e_{t} | I_{t}\right]  \\
+                      &= \phi Z_{t} + 0 - \theta e_{t} \\
+        \hat{e}(1) &= Z_{t+1} - \hat{Z}_{t+1} = e_{t+1} \\
+        \mathbb{V}\left[ \hat{e}(1)\right] &= \sigma^{2}\\
+    \end{aligned}
+\end{equation*}
+And the 1-step forecast can be found like:
+\begin{equation*}
+    \begin{aligned}
+        \hat{Z}_{t+2} &= \mathbb{E}\left[Z_{t+2} | I_{t}\right]  \\
+                      &= \mathbb{E}\left[\phi Z_{t+1} + e_{t+2} - \theta e_{t+1} | I_{t}\right]  \\
+                      &= \phi \mathbb{E}\left[Z_{t+1} | I_{t}\right]  + \mathbb{E}\left[e_{t+2} | I_{t}\right]  - \theta \mathbb{E}\left[e_{t+1} | I_{t}\right]  \\
+                      &= \phi \hat{Z}_{t+1} + 0 + 0 \\
+        \hat{e}(2) &= Z_{t+2} - \hat{Z}_{t+2} = \phi \hat{e}(1) + e_{t+2} - \theta e_{t+1}\\
+        \mathbb{V}\left[ \hat{e}(2)\right] &= \phi^{2}\sigma^{2} + \sigma^{2} + \theta^{2}\sigma^{2}\\
+        &= \sigma^{2} \left( \phi^{2} + 1 + \theta^{2}\right) \\
+    \end{aligned}
+\end{equation*}
+Note that it can be shown that as we forecast into the future, the forecast
+value converges onto the expectation of the time series:
+\begin{equation*}
+    \lim_{l \to \infty} \hat{Z}_{t+l} = \mathbb{E}\left[Z_{t}\right] 
+\end{equation*}
+And there's a similar result for the variance of the error:
+\begin{equation*}
+    \lim_{l \to \infty} \mathbb{V}\left[ \hat{e}(l)\right] = \mathbb{V}\left[ Z_{t} \right] 
+\end{equation*}
+
+
+\section{The ARIMA Process}
+This is the first of our models which is non-stationary. It stands for an
+Autoregressive Integrated Moving Average Process. Our overall tactic here will
+be to transform ARIMA processes into stationary time series so that we can
+analyse it more easily. It is parametrised by ARIMA(p, d, q) where the $d$ is
+degree of integration.
+
+\marginpar{\href{https://media.uct.ac.za/engage/theodul/ui/core.html?ltimode=true&id=87145e3d-c014-42e8-ad6a-46b293c190fe}{Time Series Video 26}}
+In practice, many time series models are non-stationary. The ARIMA process is
+denoted by
+\subsection{Difference Operator}
+Define the $\nabla$ operator as:
+\begin{equation*}
+    \begin{aligned}
+        \nabla Z_{t} &:= Z_{t} - Z_{t-1}\\
+        \nabla^{n} Z_{t} &:= \nabla^{n-1}\left(\nabla Z_{t}\right)\\
+        \nabla^{2} Z_{t} &= Z_{t} - 2Z_{t-1} + Z_{t-2} \\
+    \end{aligned}
+\end{equation*}
+\subsection{Making a ARIMA process stationary}
+We'll be using the $\nabla $ operator to convert a non-stationary time series
+into a stationary time series.
+If the time series $W_{t}$ given by:
+\begin{equation*}
+    W_{t} = \nabla Z_{t} = Z_{t} - Z_{t-1}
+\end{equation*}
+is stationary, then $Z_{t}$ is from an ARIMA(p, 1, q) process.
+
+\textbf{Or in general}, if you have to use the $\nabla $ difference operator
+$d$ times in order to convert the non-stationary process $Z_{t}$ into a
+stationary process $W_{t}$, then we say $W_{t} \sim \text{ARIMA}(p, d, q)$.
+
+Note that sometimes the MA or AR component will fall away in the process of
+taking the difference:
+\begin{itemize}
+    \item If the differenced, now stationary process $W_{t}$ only has an MA
+        component (and no AR component) then we call $Z_{t}$ an IMA(0,d,q)
+        process, Integrated Moving Average process.
+    \item If the differenced, now stationary process $W_{t}$ only has an AR
+        component (and no MA component) then we call $Z_{t}$ an IAR(p,d,0)
+        process, Integrated Autoregressive process.
+\end{itemize}
+\subsection{Finding the order of an ARIMA Process}
+The ARIMA process has three orders: p, d, q.  We can look at the
+autocorrelation function (ACF) and partial autocorrelation function (PACT), and
+if the time series is stationary then a graph of lag vs correlation will show
+that as the lag increases, the autocorrelation goes to zero.
+
+\begin{itemize}
+    \item \textbf{Stationary Series}: If the autocorrelations go to zero as the
+        lag increases, then the series is probably stationary.
+    \item \textbf{Bartlett's test}: $\frac{2}{\sqrt{n}}$ can tell you how many
+        autocorrelations are statistically significant.
+\end{itemize}
+
+The above will determine if the current time series is stationary or not. If it
+is stationary, then all is good and you know that the order of d is 1. If it's
+not stationary, then you need to use the difference operator $\nabla Z_{t}$ to
+get a new time series, and then perform the same tests on this differenced time
+series. The number of times you have to use the difference $\nabla $ operator
+is the order d of the data.
+
+
+Once we've got a stationary process, then we can try find p and q by treating
+it as an ARMA(p,q) model and examining it as in the ARMA section above.
+
+\section{Box-Jenkins Algorithm}
+
+This is a high level method for processing a given time series $Z_{t}$ and
+attempting to build a model for it.
+\begin{enumerate}
+    \item If $Z_{t}$ is not stationary, difference $\nabla $ it until you've
+        got a stationary process.
+    \item Examine the ACF and PACF of the (now stationary) time series using
+        the Bartlett's test to test for statistical significance.
+    \item From the number of statistically significant ACFs and PACFs,
+        tentatively model the data with the ARMA(p,q) process. $p$ is the
+        number of statistically significant ACFs, $q$ is the number of
+        statistically significant PACFs, 
+    \item Evaluate the tentative model with Ordinary Least Squares, Method
+        of Maximum Likelihood, or Method of Moments estimates.
+    \item Then check for \textbf{serial autocorrelation} to make sure that the
+        error terms actually are independent and identically distributed.
+    \item If the errors aren't iid, then we need to adjust the parameters for p
+        and q until they are.
+    \item Also check that the parameters of the model ($\phi_{i}, \theta_{i}, $
+        etc) are statistically significant with the usual t-tests.
+    \item Now that the errors are iid, we can use the model to forecast.
+\end{enumerate}
+
+
+Note that differencing too many times can lead to unwanted correlations.  For
+instance, for the model $Z_{t} = Z_{t-1} + e_{t}$ then the difference is given
+by:
+\begin{equation*}
+    \begin{aligned}
+        \nabla Z_{t} &= Z_{t} - Z_{t-1} = e_{t} \\
+        &\text{This is a stationary series, and we should stop here.}\\
+        &\text{But if we continue:}\\
+        \nabla (\nabla Z_{t}) &= e_{t} - e_{t-1}\\
+        &\text{we get a MA process looking like:}\\
+        Z_{t} &= e_{t} + \theta e_{t-1} \\
+    \end{aligned}
+\end{equation*}
+So over differencing can erroneously introduce parameters (like $\theta $
+above) which aren't actually part of the underlying model.
+
+
