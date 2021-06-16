@@ -99,20 +99,22 @@ Alternatively, if there are N observed events in a given time interval \([0, T]\
 Also, since \(N \sim Poi(\lambda T)\), \(\hat{\lambda}_{MLE}\) is an unbiased estimate of 
 \(\lambda\) with variance \(\frac{\lambda}{T}\).
 \section{3041F: Compound Poisson Processes}
-For regular poisson processes, every event is identical and increases the count by a 
-certain amount. The events themselves aren't random, it's only the duration inbetween
-events which is random.
+For regular poisson processes, every event is identical and increases the count
+by a certain amount. The events themselves aren't random, it's only the
+duration inbetween events which is random.
 
-For Compound Poisson Processes, both the duration between events, and the amount by 
-which our count will be changed is a random variable.
+For Compound Poisson Processes, both the duration between events, and the
+amount by which our count will be changed is a random variable.
 
-Let \(X_1, \dots X_N\) be a sequence of iid random variables with PFG \(P_X(s)\) and N a non-negative integer valued random variable with PGF \(P_N(s)\).
+Let \(X_1, \dots X_N\) be a sequence of iid random variables with PFG
+\( \mathbb{G}_X(s)\) and N a non-negative integer valued random variable with PGF
+\( \mathbb{G}_N(s)\).
 
 Then the count \(S_N\) and the PGF thereof are:
 \begin{equation*}
     \begin{aligned}
         S_N &= \sum_{i=1}^{N} X_i \\
-        P_{S_N}(s) &= P_N(P_X(s)) \\
+        \mathbb{G}_{S_N}(s) &= \mathbb{G}_N(\mathbb{G}_X(s)) \\
     \end{aligned}
 \end{equation*}
 The Expectation and Variance of \(S_N\) are given as a corollary:
@@ -122,7 +124,14 @@ The Expectation and Variance of \(S_N\) are given as a corollary:
         \mathbb{V}[S_N] &= \mathbb{E}[N]\mathbb{V}[X] + \left( \mathbb{E}[X]\right)^2 \mathbb{V}[N]\\
     \end{aligned}
 \end{equation*}
-
+Often the following result is useful, as we can go from a random sum of random
+variables $S_n$ to just a simple counting process random variable $N(t)$:
+\begin{equation*}
+    \begin{aligned}
+        \{S_n \le t\} &\iff \{N(t) \ge n\} \\
+    \mathbb{P}[S_n \le t] &= \mathbb{P}[N(t) \ge n]  \\
+    \end{aligned}
+\end{equation*}
 
 We formally define a compound Poisson process as a stochastic 
 process \(\{X(t), t > 0\}\) that can be represented as the sum of iid random variables \(X_i\) which are also independant of the Poisson process:
@@ -162,10 +171,10 @@ Define the mean value function m(t) the integral from 0 to t of \(\lambda(t)\):
 \begin{equation*}
     m(t) = \int_{0}^{t} \lambda(u) \, du
 \end{equation*}
-And then the number of events in a time interval (t, t + s] for a non-homogeneous Poisson 
-process is \(\sim Poi({\color{BrickRed}{m(t + s) - m(t)}})\), with 
-colours added to make it clear that \({\color{BrickRed}{m(t + s) - m(t)}}\) is just the 
-rate parameter to a Poisson distribution.
+And then the number of events in a time interval (t, t + s] for a
+non-homogeneous Poisson process is $\sim Poi({\color{BrickRed}{m(t + s) -
+m(t)}})$, with colours added to make it clear that ${\color{BrickRed}{m(t +
+s) - m(t)}}$ is just the rate parameter to a Poisson distribution.
 
 
 In English, the number of events over a given interval is poisson 
@@ -176,33 +185,40 @@ distributed with a rate proportional to the total intensity over that interval. 
             e^{-\left({\color{BrickRed}{m(t+s) - m(t)}}\right)} 
             \cdot \left( {\color{BrickRed}{m(t+s) - m(t)}}\right)^n
         }{n!} \\
+        \mathbb{P}[N(t) \ge n] &= \sum_{j=n}^{\infty} \frac{ m(t)^j e^{-m(t)}
+        }{ j!  } \\
         \end{aligned}
     \end{equation*}
-    \subsection{3041F: Simulation of a non-homogeneous Poisson Process}
-    Suppose that events arrive according to a poisson process with rate \(\lambda\), but we only consider some of the events, choosing events with probability p(t).\newline \newline
+\subsection{3041F: Simulation of a non-homogeneous Poisson Process}
+Suppose that events arrive according to a poisson process with rate
+\(\lambda\), but we only consider some of the events, choosing events with
+probability p(t).\newline \newline
 
-    This describes a non-homogeneous Poisson process with intensity function \(\lambda(t) = \lambda \cdot p(t)\). 
-    We can therefore simulate a non-homogeneous Poisson process by first using our methods for homogeneous poisson processes, and then discarding events according to the probability function p(t).  \newline \newline
+This describes a non-homogeneous Poisson process with intensity function
+\(\lambda(t) = \lambda \cdot p(t)\).  We can therefore simulate a
+non-homogeneous Poisson process by first using our methods for homogeneous
+poisson processes, and then discarding events according to the probability
+function p(t).  \newline \newline
 
-    \subsubsection{The Thinning algorithm}
-    The thinning algorithm generates a non-homogeneous poisson process by finding an constant valued 
-    approximation of the rate function, generating a homogeneous poisson process according to this 
-    constant, and then discarding some events such that the approximation of the rate function 
-    becomes the actual rate function.
+\subsubsection{The Thinning algorithm}
+The thinning algorithm generates a non-homogeneous poisson process by finding an constant valued 
+approximation of the rate function, generating a homogeneous poisson process according to this 
+constant, and then discarding some events such that the approximation of the rate function 
+becomes the actual rate function.
 
-    If we want to simulate over a time interval [0, T] according to intensity function 
-    \(\lambda(t) > 0\) first generate events according to a poisson process with rate \(\lambda\)
-    over the interval [0, T] to give the N interarrival times \(T_1, \dots, T_N\).\newline
-    Then select \(\lambda_{max}\) such that 
-    \begin{equation*}
-        \lambda_{max} \ge \lambda(t) \qquad \forall \, t \in [0, T]
-    \end{equation*}
+If we want to simulate over a time interval [0, T] according to intensity function 
+\(\lambda(t) > 0\) first generate events according to a poisson process with rate \(\lambda\)
+over the interval [0, T] to give the N interarrival times \(T_1, \dots, T_N\).\newline
+Then select \(\lambda_{max}\) such that 
+\begin{equation*}
+    \lambda_{max} \ge \lambda(t) \qquad \forall \, t \in [0, T]
+\end{equation*}
 
-    Finally, create an indicator function with \(\lambda_{max}\) to select only those events where
-    a Uniform random variable in the range [0, \(\lambda_{max}\)) is less than \(\lambda(t)\): 
-    \begin{equation*}
-        U(0, \lambda_{max}) \le \lambda(t) \quad \text{for } t = \sum_{i=1}^{j} T_i
-    \end{equation*}
+Finally, create an indicator function with \(\lambda_{max}\) to select only those events where
+a Uniform random variable in the range [0, \(\lambda_{max}\)) is less than \(\lambda(t)\): 
+\begin{equation*}
+    U(0, \lambda_{max}) \le \lambda(t) \quad \text{for } t = \sum_{i=1}^{j} T_i
+\end{equation*}
 
     Then all those selected events make up the required non-homogeneous poisson process.
     \subsubsection{Subintervals for simulations}
