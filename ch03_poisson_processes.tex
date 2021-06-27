@@ -252,30 +252,71 @@ the (i-1)th arrival time and the (i-1)th arrival time plus t. This implies:
                                                 &=  e^{-\left(m(w_{i-1} + t) - m(w_{i-w})\right)} \\
     \end{aligned}
 \end{equation*}
-\subsubsection{Likelihood for non-homogeneous Poisson Processes}
-In general, explicit expressions for the MLEs do not exist, and likelihood maximisation must be 
-done numerically.
-The notes give examples, but they all boil down to two different cases. The first case is when we have data about the first \(n\) arrivals, and can be calculated as so:
+\subsubsection{Likelihood for Homogeneous Poisson Processes}
+For a homogeneous Poisson process with:
+\begin{itemize}
+    \item $\lambda$ as the rate parameter
+    \item  Observing $n$ inter-arrivals
+    \item with a dataset $\mathcal{D} = \{t_{1}, \dots, t_{n} \}$ 
+    \item in the timeframe [0, T]
+\end{itemize}
+Then the likelihood function is given by:
+\begin{equation*}
+    L(\lambda|\mathcal{D}) = \lambda^{n}e^{-\lambda T}
+\end{equation*}
+Which accounts for seeing the arrivals that we did, as well as not seeing any
+arrivals in the interval after our last arrival but before the end of our
+recording: $(s_{n}, T]$.
+
+But this doesn't work when $\lambda$ is a function instead of a constant. See
+the next section for how to deal with that:
+
+\subsubsection{Likelihood for Non-homogeneous Poisson Processes}
+In general, explicit expressions for the MLEs do not exist, and likelihood
+maximisation must be done numerically.  
+
+Note that when specifying a rate function $\lambda(t)$ that takes certain
+paramters, we have certain constraints on it (like the rate can never be
+negative), which would require solving a constrained optimisation problem. For
+example, the below equation with parameters $\theta_{1}, \theta_{2}$ requires
+that both $\theta_{1}$ and $\theta_{2}$ are non-negative:
+\begin{equation*}
+    \lambda(t) = \theta_{1} + \theta_{2}t
+\end{equation*}
+
+However, if we instead use the following equation:
+\begin{equation*}
+    \lambda(t) = e^{\theta_{1}} + e^{\theta_{2}}t
+\end{equation*}
+Then we don't have any constraints on what $\theta_{1}$ and $\theta_{2}$ need to
+be, which often makes optimisation much easier.
+
+When we have data about the first \(n\) arrivals, the likelihood function can
+be calculated by: 
 \begin{enumerate}
-    \item taking a given intensity function with unknown parameters \(\theta\) and observed waiting times \(w_1, \dots, w_n\),
+    \item Taking a given intensity function with unknown parameters \(\theta\) and observed waiting times \(w_1, \dots, w_n\),
     \item Calculating the log-likelihood function as 
         \begin{equation*}
             l(\theta) = \sum_{i=1}^{n}ln\left(\lambda(w_i; \theta)\right) - 
             \left(m(w_n; \theta) - m(w_0; \theta)\right)
         \end{equation*}
-    \item and then maximising \(l\) with respect to \(\theta\) in order to find the MLEs for \(\theta\).
+    \item and then maximising \(l\) with respect to \(\theta\) in order to find
+        the MLEs for \(\theta\).
 \end{enumerate}
 
-The second case is where we've measured all arrivals in an interval [0, T], and can be 
-calculated as shown below. It is different, because we need to account for the probability that 
-we saw no additional events between our last observed event and T.
+When we've measured all arrivals in an interval [0, T] then the likelihood can
+be calculated as below. We need to account for the probability that we saw no
+additional events between our last observed event and T.
 \begin{enumerate}
-    \item taking a given intensity function with unknown parameters \(\theta\) and observed waiting times \(w_1, \dots, w_n\). All waiting times should be within [0, T].
+    \item taking a given intensity function with unknown parameters \(\theta\)
+        and observed waiting times \(w_1, \dots, w_n\). All waiting times
+        should be within [0, T].
     \item Calculating the likelihood function as 
         \begin{equation*}
             L(\theta) = \prod_{i=1}^{N}\lambda(w_i; \theta) e^{-m(T; \theta)}
         \end{equation*}
-    \item and then maximising \(L\) with respect to \(\theta\) will give the MLEs of \(\theta\).
+    \item and then maximising \(L\) with respect to \(\theta\) will give the
+        MLEs of \(\theta\).
 \end{enumerate}
 
 The notes also go into likelihood ratio tests for seeing if a particular
