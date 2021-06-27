@@ -32,6 +32,35 @@ as we have not been given a list of proofs to learn. When I have found a proof
 used in a past paper, I've listed the past paper in the margins with the year,
 and a code like T2 for Test 2 or E for Exam.
 \marginpar{Example note}
+\subsection{PGF of a Branching Process}
+Work in progress
+\subsection{Expectation of a Branching Process}
+Note that the following are true for any random variable $X$:
+\begin{itemize}
+    \item $ \mathbb{G}_{X}(1) = 1 $ 
+    \item $ \mathbb{G}_{X}'(1) = \mathbb{E}\left[X\right]$ 
+\end{itemize}
+And so the expectation of a branching process goes like:
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{E}\left[Z_{m}\right] &= \left.\frac{d}{ds} \mathbb{G}_Z{_{m}}(s)
+        \right|_{s=1}  \\
+            &= \left.\frac{d}{ds}\mathbb{G}_X\left(\mathbb{G}_{Z_{m-1}}(s) \right)
+            \right\vert_{s=1}\\
+            &= \mathbb{G}_X'\left( \mathbb{G}_Z{_{m-1}}(1) \right)
+            \cdot \mathbb{G}_Z{_{m-1}}'(1) \quad\text{(Chain Rule)}\\
+            &= \mathbb{G}_X'\left( 1 \right) \mathbb{G}_Z{_{m-1}}'(1)\\
+            &= \mathbb{E}\left[ X \right]  \mathbb{E}\left[Z_{m-1}\right] \\
+            &= \mathbb{E}\left[ X \right]  \mathbb{E}\left[X\right] \mathbb{E}\left[Z_{m-2}\right] \\
+            &\vdots \\
+        \mathbb{E}\left[Z_{m}\right] &= \mathbb{E}\left[ X \right]^{m} \\
+            &= \mu^{m} \\
+    \end{aligned}
+\end{equation*}
+    
+
+\subsection{Variance of a Branching Process}
+Work in progress
 \subsection{Probability of Eventual Extinction of a Branching Process}
 There's two parts to this, 
 \begin{enumerate}
@@ -91,11 +120,7 @@ So, to actually do the proof:
 So $\eta$ will always be smaller than any other possible root $w$ to the
 equation $ \mathbb{G}(s) = s$
 
-\subsection{Expectation and Variance of a Branching Process}
-Work in progress
 \subsection{MGFs for First Passage and First Return}
-Work in progress
-\subsection{MGFs for a Branching Process}
 Work in progress
 \subsection{Chapman-Kolmogorov Equations}
 \marginpar{2019 T1}
