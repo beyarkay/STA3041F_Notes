@@ -129,7 +129,7 @@ variables $S_n$ to just a simple counting process random variable $N(t)$:
 \begin{equation*}
     \begin{aligned}
         \{S_n \le t\} &\iff \{N(t) \ge n\} \\
-    \mathbb{P}[S_n \le t] &= \mathbb{P}[N(t) \ge n]  \\
+        \mathbb{P}[S_n \le t] &= \mathbb{P}[N(t) \ge n]  \\
     \end{aligned}
 \end{equation*}
 
@@ -173,7 +173,7 @@ Define the mean value function m(t) the integral from 0 to t of \(\lambda(t)\):
 \end{equation*}
 And then the number of events in a time interval (t, t + s] for a
 non-homogeneous Poisson process is $\sim Poi({\color{BrickRed}{m(t + s) -
-m(t)}})$, with colours added to make it clear that ${\color{BrickRed}{m(t +
+        m(t)}})$, with colours added to make it clear that ${\color{BrickRed}{m(t +
 s) - m(t)}}$ is just the rate parameter to a Poisson distribution.
 
 
@@ -185,10 +185,10 @@ distributed with a rate proportional to the total intensity over that interval. 
             e^{-\left({\color{BrickRed}{m(t+s) - m(t)}}\right)} 
             \cdot \left( {\color{BrickRed}{m(t+s) - m(t)}}\right)^n
         }{n!} \\
-        \mathbb{P}[N(t) \ge n] &= \sum_{j=n}^{\infty} \frac{ m(t)^j e^{-m(t)}
-        }{ j!  } \\
-        \end{aligned}
-    \end{equation*}
+            \mathbb{P}[N(t) \ge n] &= \sum_{j=n}^{\infty} \frac{ m(t)^j e^{-m(t)}
+            }{ j!  } \\
+    \end{aligned}
+\end{equation*}
 \subsection{3041F: Simulation of a non-homogeneous Poisson Process}
 Suppose that events arrive according to a poisson process with rate
 \(\lambda\), but we only consider some of the events, choosing events with
@@ -220,63 +220,64 @@ a Uniform random variable in the range [0, \(\lambda_{max}\)) is less than \(\la
     U(0, \lambda_{max}) \le \lambda(t) \quad \text{for } t = \sum_{i=1}^{j} T_i
 \end{equation*}
 
-    Then all those selected events make up the required non-homogeneous poisson process.
-    \subsubsection{Subintervals for simulations}
-    The thinning algorithm will regect lots of events if the intensity function \(\lambda(t)\) 
-    is very different from \(\lambda_{max}\). We can fix this by dividing up the time interval
-    into multiple smaller subintervals, and then running the thinning algorithm individually on
-    each of these sub-intervals. Each time calculating a new and different value for 
-    \(\lambda_{max}\).
-    \subsubsection{Combining homogeneous Poisson Processes}
-    Since the sum of events for two independant Poisson Processes with rates 
-    \(\lambda_1\) and \(\lambda_2\) is itself a Poisson Process with rate \(\lambda_1 + \lambda_2\)
-    we can use this to efficiently create piecewise Poisson processes where the 
-    intensity function \(\lambda(t)\) is sometimes constant.
-    \subsection{3041F: Estimation of non-homogeneous Poisson Processess}
-    The PDf of the ith interarrival time given the waiting time of the (i-1)th can be written as:
+Then all those selected events make up the required non-homogeneous poisson process.
+\subsubsection{Subintervals for simulations}
+The thinning algorithm will regect lots of events if the intensity function \(\lambda(t)\) 
+is very different from \(\lambda_{max}\). We can fix this by dividing up the time interval
+into multiple smaller subintervals, and then running the thinning algorithm individually on
+each of these sub-intervals. Each time calculating a new and different value for 
+\(\lambda_{max}\).
+\subsubsection{Combining homogeneous Poisson Processes}
+Since the sum of events for two independant Poisson Processes with rates 
+\(\lambda_1\) and \(\lambda_2\) is itself a Poisson Process with rate \(\lambda_1 + \lambda_2\)
+we can use this to efficiently create piecewise Poisson processes where the 
+intensity function \(\lambda(t)\) is sometimes constant.
+\subsection{3041F: Estimation of non-homogeneous Poisson Processess}
+The PDf of the ith interarrival time given the waiting time of the (i-1)th can be written as:
 
-    \begin{equation*}
-        f_{T_i | W_{i-1}}(t) = 
-        \lambda(w_{i-1} + t) \cdot e^{-\left(m(w_{i-1} + t) - m(w_{i-w})\right)}
-    \end{equation*}
+\begin{equation*}
+    f_{T_i | W_{i-1}}(t) = 
+    \lambda(w_{i-1} + t) \cdot e^{-\left(m(w_{i-1} + t) - m(w_{i-w})\right)}
+\end{equation*}
 
-    Note that the arrival times are independant due to the increments being independant. \newline \newline
+Note that the arrival times are independant due to the increments being independant. \newline \newline
 
-    Note that the probability of the ith interarrival time being greater than some value t (given 
-    the (i-1)th arrival time) is equivalent to the probability of there being zero events between 
-    the (i-1)th arrival time and the (i-1)th arrival time plus t. This implies:
+Note that the probability of the ith interarrival time being greater than some value t (given 
+the (i-1)th arrival time) is equivalent to the probability of there being zero events between 
+the (i-1)th arrival time and the (i-1)th arrival time plus t. This implies:
 
-    \begin{equation*}
-        \begin{aligned}
-            \mathbb{P}[T_i > t | W_{i-1} = w_{i-1}] &= \mathbb{P}[N(w_{i-1} + t) - N(w_{i-1}) = 0] \\
-                                                    &=  e^{-\left(m(w_{i-1} + t) - m(w_{i-w})\right)} \\
-        \end{aligned}
-    \end{equation*}
-    \subsubsection{Likelihood for non-homogeneous Poisson Processes}
-    In general, explicit expressions for the MLEs do not exist, and likelihood maximisation must be 
-    done numerically.
-    The notes give examples, but they all boil down to two different cases. The first case is when we have data about the first \(n\) arrivals, and can be calculated as so:
-    \begin{enumerate}
-        \item taking a given intensity function with unknown parameters \(\theta\) and observed waiting times \(w_1, \dots, w_n\),
-        \item Calculating the log-likelihood function as 
-            \begin{equation*}
-                l(\theta) = \sum_{i=1}^{n}ln\left(\lambda(w_i; \theta)\right) - 
-                \left(m(w_n; \theta) - m(w_0; \theta)\right)
-            \end{equation*}
-        \item and then maximising \(l\) with respect to \(\theta\) in order to find the MLEs for \(\theta\).
-    \end{enumerate}
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{P}[T_i > t | W_{i-1} = w_{i-1}] &= \mathbb{P}[N(w_{i-1} + t) - N(w_{i-1}) = 0] \\
+                                                &=  e^{-\left(m(w_{i-1} + t) - m(w_{i-w})\right)} \\
+    \end{aligned}
+\end{equation*}
+\subsubsection{Likelihood for non-homogeneous Poisson Processes}
+In general, explicit expressions for the MLEs do not exist, and likelihood maximisation must be 
+done numerically.
+The notes give examples, but they all boil down to two different cases. The first case is when we have data about the first \(n\) arrivals, and can be calculated as so:
+\begin{enumerate}
+    \item taking a given intensity function with unknown parameters \(\theta\) and observed waiting times \(w_1, \dots, w_n\),
+    \item Calculating the log-likelihood function as 
+        \begin{equation*}
+            l(\theta) = \sum_{i=1}^{n}ln\left(\lambda(w_i; \theta)\right) - 
+            \left(m(w_n; \theta) - m(w_0; \theta)\right)
+        \end{equation*}
+    \item and then maximising \(l\) with respect to \(\theta\) in order to find the MLEs for \(\theta\).
+\end{enumerate}
 
-    The second case is where we've measured all arrivals in an interval [0, T], and can be 
-    calculated as shown below. It is different, because we need to account for the probability that 
-    we saw no additional events between our last observed event and T.
-    \begin{enumerate}
-        \item taking a given intensity function with unknown parameters \(\theta\) and observed waiting times \(w_1, \dots, w_n\). All waiting times should be within [0, T].
-        \item Calculating the likelihood function as 
-            \begin{equation*}
-                L(\theta) = \prod_{i=1}^{N}\lambda(w_i; \theta) e^{-m(T; \theta)}
-            \end{equation*}
-        \item and then maximising \(L\) with respect to \(\theta\) will give the MLEs of \(\theta\).
-    \end{enumerate}
+The second case is where we've measured all arrivals in an interval [0, T], and can be 
+calculated as shown below. It is different, because we need to account for the probability that 
+we saw no additional events between our last observed event and T.
+\begin{enumerate}
+    \item taking a given intensity function with unknown parameters \(\theta\) and observed waiting times \(w_1, \dots, w_n\). All waiting times should be within [0, T].
+    \item Calculating the likelihood function as 
+        \begin{equation*}
+            L(\theta) = \prod_{i=1}^{N}\lambda(w_i; \theta) e^{-m(T; \theta)}
+        \end{equation*}
+    \item and then maximising \(L\) with respect to \(\theta\) will give the MLEs of \(\theta\).
+\end{enumerate}
 
-    The notes also go into likelihood ratio tests for seeing if a particular Poisson process is non-
-    homogeneous, but I'm not going to write that up here.
+The notes also go into likelihood ratio tests for seeing if a particular
+Poisson process is non- homogeneous, but I'm not going to write that up
+here.
