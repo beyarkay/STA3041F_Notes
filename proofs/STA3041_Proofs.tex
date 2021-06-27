@@ -1,0 +1,144 @@
+\title{Math Stats Proofs}
+\author{ Boyd Kane }
+\date{Last updated: \today}
+\documentclass[12pt]{report}
+% Allow images to be used
+\usepackage{graphicx}
+\graphicspath{{./images/}}
+% Clickable hyperlinks
+\usepackage{hyperref}
+% Colourful equations
+\usepackage[dvipsnames]{xcolor} 
+% Nice math
+\usepackage{amsmath} 
+% Nice symbols in math
+\usepackage{amssymb} 
+% Required in order to calculate the width of a certain piece of text
+\usepackage{calc}
+% Make a \sim with iid on top of it
+\newcommand\iid{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily
+iid}}}{\sim}}}
+% Make the independence symbol with two perpendiculars next to each other
+\newcommand{\indep}{\perp \!\!\! \perp}
+% Explain math using an underbrace
+\newcommand{\explain}[2]{\underbrace{#1}_{\parbox{\widthof{\ensuremath{#1}}}{\footnotesize\raggedright #2}}}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\section{About this document}
+This document does \textit{not} contain all the proofs required for STA3041F,
+as we have not been given a list of proofs to learn. When I have found a proof
+used in a past paper, I've listed the past paper in the margins with the year,
+and a code like T2 for Test 2 or E for Exam.
+\marginpar{Example note}
+\subsection{Probability of Eventual Extinction of a Branching Process}
+There's two parts to this, 
+\begin{enumerate}
+    \item The part that $G(s) - s = 0$ is the probability of eventual
+        extinction.
+    \item The part that the probability of eventual extinction is the smallest
+        positive root of $s$.
+\end{enumerate}
+\subsubsection{Proof of $G(s) - s = 0$}
+Note that this isn't exactly how it's laid out in the notes. I've tried to
+simplify the terminology a bit.
+\begin{equation*}
+    \begin{aligned}
+        \eta &= \mathbb{P}\left[\bigcup_{m=1}^{\infty} Z_{m} = 0\right] \\
+            &= \lim_{m\to\infty} \mathbb{P}\left[Z_{m} = 0\right] \\
+            &= \lim_{m\to\infty} \mathbb{G}_{Z_{m}}(0) \\
+            &= \lim_{m\to\infty} \mathbb{G}_{X}( \mathbb{G}_{Z_{m-1}}(0)) \\
+            &= \lim_{m\to\infty} \mathbb{G}_{X}(\mathbb{P}\left[Z_{m-1} = 0\right]) \\
+            &=  \mathbb{G}_{X}(\lim_{m\to\infty} \mathbb{P}\left[Z_{m-1} = 0\right])\\
+            &=  \mathbb{G}_{X}\left(\mathbb{P}\left[\bigcup_{m=1}^{\infty}
+            Z_{m} = 0\right]\right)\\
+            \eta &=  \mathbb{G}_{X}(\eta)\\
+    \end{aligned}
+\end{equation*}
+
+\subsubsection{Proof that the probability of eventual extinction is the
+smallest positive root}
+Given that the probability of eventual extinction $\eta$ is a root of $
+\mathbb{G}_X(s) - s = 0$, we now prove that $\eta$ is the smallest non-negative
+root, note that:
+\begin{itemize}
+    \item We define $w$ as a solution to $ \mathbb{G}_X(w) = w $
+    \item The process, by definition starts out with positive population:
+        $Z_{0} > 0 \implies \mathbb{P}\left[Z_{0} = 0\right] = 0$
+    \item $\eta_{m} = \mathbb{G}_X(\eta_{m-1}) =
+        \mathbb{G}_X(\mathbb{G}_X(\eta_{m-2})) = \dots $
+    \item The generating function has infinite positive terms, so
+        is non-decreasing: $\mathbb{G}_X(s) \le \mathbb{G}_X(t) \implies s \le t$
+\end{itemize}
+So, to actually do the proof:
+\begin{equation*}
+    \begin{aligned}
+        \eta_{0} &= \mathbb{P}\left[Z_{0} = 0\right] = 0 \le w \\
+        \eta_{0} &\le w \\
+        \mathbb{G}(\eta_{0}) &\le \mathbb{G}(w) = w \quad\text{(by definition
+        of $w$)} \\
+        \eta_{1} &\le w \\
+        \mathbb{G}(\eta_{1}) &\le \mathbb{G}(w) \\
+        \eta_{2} &\le w \\
+        \mathbb{G}(\eta_{2}) &\le \mathbb{G}(w) \\
+        \eta_{3} &\le w \\
+                             &\vdots\\
+        \text{So } \eta_{n} &\le w \quad \text{for all } n\\
+        \eta &= \lim_{m \to \infty} \eta_{m} \le w
+    \end{aligned}
+\end{equation*}
+So $\eta$ will always be smaller than any other possible root $w$ to the
+equation $ \mathbb{G}(s) = s$
+
+\subsection{Expectation and Variance of a Branching Process}
+Work in progress
+\subsection{MGFs for First Passage and First Return}
+Work in progress
+\subsection{MGFs for a Branching Process}
+Work in progress
+\subsection{Chapman-Kolmogorov Equations}
+\marginpar{2019 T1}
+Given that a chain has the Markov property, the equations are, for all $0 \le v
+\le t$:
+\begin{equation*}
+    \begin{aligned}
+        p_{ij}(s, t) :&= \mathbb{P}\left[X_{s+t} = j | X_{s} = i\right] \\
+                     &= \sum_{k\in\mathcal{U}} p_{ik}(s,v) \cdot p_{kj}(s+v,t-v)\\
+    \end{aligned}
+\end{equation*}
+The proof is due to the law of total probability and the Markov property. It
+might help to first recall that:
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{P}\left[A | B\right] &= \frac{ \mathbb{P}\left[A \cap B\right]}{ \mathbb{P}\left[B\right] } \\
+            &\iff \\
+        \mathbb{P}\left[A \cap B \right]  &=  \mathbb{P}\left[A | B\right] \cdot \mathbb{P}\left[B\right] \\
+    \end{aligned}
+\end{equation*}
+So the proof is:
+\begin{equation*}
+    \begin{aligned}
+        p_{ij}(s, t) &= \mathbb{P}\left[X_{s+t} = j | X_{s} = i\right] \\
+            &= \sum_{k\in\mathcal{U}} \mathbb{P}\left[X_{s+t} = j, X_{s+v} = k | X_{s} = i\right]  \\
+            &= \sum_{k\in\mathcal{U}} \mathbb{P}\left[ X_{s+v} = k | X_{s} = i \right] \cdot \mathbb{P}\left[ X_{s+t} = j | X_{s+v} = k, X_{s} = i\right]  \\
+            &= \sum_{k\in\mathcal{U}} \mathbb{P}\left[ X_{s+v} = k | X_{s} = i \right] \cdot \mathbb{P}\left[ X_{s+t} = j | X_{s+v} = k\right]  \\
+            &= \sum_{k\in\mathcal{U}} p_{ik}(s,v) \cdot p_{kj}(s+v,t-v)\\
+    \end{aligned}
+\end{equation*}
+
+\subsection{Probability of one Exponential RV being less than another}
+\marginpar{2019 T1}
+Where $X_{i} \iid Exp(\lambda_{i})$ for $i \in \{1, 2\}$:
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{P}\left[X_{1} < X_{2}\right] &= \int_{0}^{\infty} \int_{0}^{x_{2}} \left( \lambda_{1}e^{-\lambda_{1}x_{1}} \right) \cdot \left( \lambda_{2}e^{-\lambda_{2}x_{2}} \right) \,dx_{1}  \,dx_{2}  \\
+            &= \int_{0}^{\infty} \int_{0}^{x_{2}}  \lambda_{1}e^{-\lambda_{1}x_{1}} \,dx_{1} \, \lambda_{2}e^{-\lambda_{2}x_{2}}  \,dx_{2}  \\
+            &= \int_{0}^{\infty} \left( 1 - e^{-\lambda_{1}x_{2}}\right) \cdot \left( \lambda_{2}e^{-\lambda_{2}x_{2}} \right) \,dx_{2}  \\
+            &= 1 - \lambda_{2} \int_{0}^{\infty} e^{-(\lambda_{1} + \lambda_{2})} \,dx_{2} \\
+            &= \frac{\lambda_{1}}{\lambda_{1} + \lambda_{2}} \\
+    \end{aligned}
+\end{equation*}
+
+\end{document}
+
