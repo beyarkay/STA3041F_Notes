@@ -70,210 +70,204 @@ Don't forget the test comes with identities for converting Probability matrices 
 \section{3041F: Discrete Time}
 \subsection{Calculating the Count at a given Time}
 \subsubsection{Forecasting}
-\begin{equation}
+\begin{equation*}
     \mathbb{P}[N_{n+k} = a + i | N_n = a] = 
     \binom{k}{i} \cdot p^i \cdot q^{k-i}
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     (N_{n+k} - N_n) \sim Binomial(k, p)
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     (N_{n+k} - N_n) \indep N_n
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     \mathbb{E}[N_{n+k} | N_n = a] = k \cdot p + a
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     \mathbb{V}[N_{n+k} | N_n = a] = k \cdot p \cdot a
-\end{equation}
+\end{equation*}
 
 \subsubsection{Backcasting}
-\begin{equation}
+\begin{equation*}
     \mathbb{P}[N_n = a | N_{n+k} = a + i] = 
     \frac{
         \binom{n}{a} \binom{k}{i}
         }{
         \binom{n+k}{a+i}
     }
-\end{equation}
-\begin{equation}
+\end{equation*}
+\begin{equation*}
     \mathbb{P}[N_n = a | N_{n+k} = a + i] \sim HyperGeo(n+k, n, a+i)
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     \mathbb{E}[N_n | N_{n+k} = a + i] = \frac{(a + i) \cdot n}{n + k}
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     \mathbb{V}[N_n | N_{n+k} = a + i] = 
     \frac{n + k - a - i}{n + k - 1} \cdot 
     \frac{(a + i) \cdot n}{ n + k} \cdot 
     ( 1 - \frac{n}{n + k})
-\end{equation}
+\end{equation*}
 
 \subsection{Calculating the Time until a given Count}
-\begin{equation}
+\begin{equation*}
     T_a \sim NegBinomial(a, p) 
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     \mathbb{E}[T_a] = \frac{a}{p}
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     \mathbb{V}[T_a] = \frac{a \cdot q}{p^2}
-\end{equation}
+\end{equation*}
 
 
 \subsubsection{Forecasting}
-\begin{equation}
+\begin{equation*}
     \mathbb{P}[T_{a + i} = t + j | T_a = t] =
     \binom{j-1}{i-1} \cdot p^i \cdot q^{j-i}
-\end{equation}
-
-\begin{equation}
+\end{equation*}
+\begin{equation*}
     \mathbb{P}[T_{a + i} = t + j | T_a = t] \sim NegBinomial(i, p)
-\end{equation}
-
-
-\begin{equation}
-    \mathbb{P}[T_{a + i} | T_a = t] = 
-    \frac{i}{p} + t
-\end{equation}
-
-\begin{equation}
-    \mathbb{P}[T_{a + i} | T_a = t] = 
-    \frac{i \cdot q}{p^2}
-\end{equation}
+\end{equation*}
+\begin{equation*}
+    \mathbb{E}[T_{a + i} | T_a = t] = \frac{i}{p} + t
+\end{equation*}
+\begin{equation*}
+    \mathbb{V}[T_{a + i} | T_a = t] = \frac{i \cdot q}{p^2}
+\end{equation*}
 
 \subsubsection{Backcasting}
-\begin{equation}
+\begin{equation*}
     \mathbb{P}[T_a = t | T_{a + i} = t + j] =
     \frac{
         \binom{t - 1}{a - 1} \cdot \binom{j - 1}{i - 1}
         }{
         \binom{t + j - 1}{a + i - 1}
     }
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     \mathbb{E}[T_a | T_{a + i} = t + j] = \frac{a (t + j)}{ a + i }
-\end{equation}
+\end{equation*}
 
 
-\begin{equation}
+\begin{equation*}
     \mathbb{V}[T_a | T_{a + i} = t + j] = 
     \frac{
         a i (t + j) (t + j - a - i)
         }{
         (a + i)^2 (a + i + 1)
     }
-\end{equation}
+\end{equation*}
 \section{3041F: Continuous Time}
 With the assumptions that \(\lambda_i = \lambda\) and \(t_i = t\) for all i:
 
-\begin{equation}
+\begin{equation*}
     X_i \sim Poisson(\lambda t)
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     Y_n = \sum_{i = 1}^{n} X_i
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     Y_n \sim Poisson(n \lambda t)
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     Y_{n+k} - Y_n \sim Poisson(k \lambda t)
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     \mathbb{C}ov[Y_n, Y_m] = \lambda \cdot t \cdot min(n, m)
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     \mathbb{C}orr[Y_n, Y_m] = \frac{min(n, m)}{\sqrt{nm}}
-\end{equation}
+\end{equation*}
 
 \subsection{Calculating the Count at a given Time}
 \subsubsection{Forecasting}
-\begin{equation}
+\begin{equation*}
     \mathbb{P}[Y_{n + k} = a + i | Y_n = a] =
     \frac{
         e^{-k \lambda t} \cdot (k \lambda t)^i
     }{ i! }
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     \mathbb{E}[Y_{n + k} | Y_n = a] = k \lambda t + a
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     \mathbb{V}[Y_{n + k} | Y_n = a] = k \lambda t
-\end{equation}
+\end{equation*}
 
 \subsubsection{Backcasting}
-\begin{equation}
+\begin{equation*}
     \mathbb{P}[Y_n = a | Y_{n + k} = a + i ] =
     \binom{a + i}{a} 
     \left(\frac{n}{n + k}\right)^a 
     \left(\frac{k}{n + k}\right)^i
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     \mathbb{P}[Y_n = a | Y_{n + k} = a + i ] 
     \sim Binomial\left(a + i, \frac{n}{n+k}\right)
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     \mathbb{E}[Y_n | Y_{n + k} = a + i ] =
     \frac{(a + i) \cdot n}{n+k}
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     \mathbb{V}[Y_n | Y_{n + k} = a + i ] = 
     \frac{(a + i) \cdot n \cdot k}{(n + k)^2}
-\end{equation}
+\end{equation*}
 
 \subsection{Calculating the Time until a given Count}
 
-\begin{equation}
+\begin{equation*}
     T_1 \sim Exponential\left(\frac{1}{\lambda}\right)
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     T_a \sim Gamma(a, \lambda)
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     \mathbb{E}[T_a] = \frac{a}{\lambda}
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     \mathbb{V}[T_a] = \frac{a}{\lambda^2}
-\end{equation}
+\end{equation*}
 
 \subsubsection{Forecasting}
-\begin{equation}
+\begin{equation*}
     \mathbb{E}[T_{a + i} | T_a = t] = \frac{i}{\lambda} + t
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     \mathbb{V}[T_{a + i} | T_a = t] = \frac{i}{\lambda^2}
-\end{equation}
+\end{equation*}
 
 
 \subsubsection{Backcasting}
-\begin{equation}
+\begin{equation*}
     \mathbb{E}[T_a | T_{a + i} = t + j] = \frac{a(t + j)}{a + i}
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
     \mathbb{V}[T_a | T_{a + i} = t + j] = 
     \frac{ ai(t + j)^2 }{ (a + i)^2 \cdot (a + i + 1) }
-\end{equation}
+\end{equation*}
